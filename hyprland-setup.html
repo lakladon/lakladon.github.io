@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройка Hyprland Wayland Compositor | /dev/null</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #ff66cc;
+            --secondary-color: #cc0066;
+            --dark-purple: #33001a;
+            --text-color: #ffe6f7;
+            --bg-color: var(--dark-purple);
+            --card-bg: rgba(68, 0, 34, 0.3);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(51, 0, 26, 0.7);
+            backdrop-filter: blur(5px);
+            border-left: 1px solid var(--primary-color);
+            border-right: 1px solid var(--primary-color);
+            min-height: 100vh;
+        }
+
+        .article-header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--secondary-color);
+            margin-bottom: 30px;
+        }
+
+        .article-title {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .article-meta {
+            color: var(--text-color);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .article-content {
+            padding: 0 10px;
+        }
+
+        .config-block {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .config-title {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        pre {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-left: 3px solid var(--primary-color);
+            overflow-x: auto;
+            border-radius: 5px;
+        }
+
+        code {
+            background-color: rgba(204, 0, 102, 0.3);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+        }
+
+        .keybindings {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .keybinding {
+            background: var(--card-bg);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .key-combo {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: var(--primary-color);
+            text-decoration: none;
+            border: 1px solid var(--primary-color);
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background-color: var(--primary-color);
+            color: var(--dark-purple);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .article-title {
+                font-size: 1.8rem;
+            }
+            
+            .keybindings {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="article-header">
+            <h1 class="article-title"><i class="fas fa-window-maximize"></i> Настройка Hyprland Wayland Compositor</h1>
+            <div class="article-meta">
+                <span><i class="far fa-calendar-alt"></i> 1 июня 2023</span>
+                <span><i class="far fa-clock"></i> 10 мин чтения</span>
+            </div>
+        </header>
+
+        <article class="article-content">
+            <p>Hyprland - это динамический Wayland композитор с эффектами, написанный на C++. Он лёгкий, быстрый и идеально подходит для слабых машин.</p>
+
+            <div class="config-block">
+                <h3 class="config-title"><i class="fas fa-download"></i> Установка</h3>
+                <p>Для Arch Linux:</p>
+                <pre><code>paru -S hyprland-git</code></pre>
+                <p>Зависимости:</p>
+                <pre><code>sudo pacman -S xdg-desktop-portal-hyprland \
+waybar rofi dunst polkit-kde-agent \
+qt5-wayland qt6-wayland</code></pre>
+            </div>
+
+            <h2>Базовая конфигурация</h2>
+            <p>Основной конфиг находится в <code>~/.config/hypr/hyprland.conf</code>. Вот мой базовый конфиг:</p>
+
+            <div class="config-block">
+                <h3 class="config-title"><i class="fas fa-cog"></i> ~/.config/hypr/hyprland.conf</h3>
+                <pre><code># Монитор
+monitor=,preferred,auto,1
+
+# Запуск Waybar
+exec-once = waybar
+exec-once = dunst
+exec-once = /usr/lib/polkit-kde-authentication-agent-1
+
+# Переменные
+$terminal = alacritty
+$fileManager = thunar
+$menu = rofi -show drun
+
+# Окружение
+env = XCURSOR_SIZE,24
+env = QT_QPA_PLATFORM,wayland
+
+# Вход
+input {
+    kb_layout = us,ru
+    kb_options = grp:alt_shift_toggle
+    follow_mouse = 1
+    touchpad {
+        natural_scroll = yes
+    }
+}
+
+general {
+    gaps_in = 5
+    gaps_out = 10
+    border_size = 2
+    col.active_border = rgba(ff66ccff)
+    col.inactive_border = rgba(595959aa)
+    layout = dwindle
+}
+
+decoration {
+    rounding = 5
+    blur {
+        enabled = true
+        size = 3
+        passes = 1
+    }
+    drop_shadow = yes
+    shadow_range = 4
+    shadow_render_power = 3
+    col.shadow = rgba(1a1a1aee)
+}
+
+animations {
+    enabled = yes
+    bezier = myBezier, 0.05, 0.9, 0.1, 1.05
+    animation = windows, 1, 7, myBezier
+    animation = windowsOut, 1, 7, default, popin 80%
+    animation = border, 1, 10, default
+    animation = fade, 1, 7, default
+    animation = workspaces, 1, 6, default
+}
+
+dwindle {
+    pseudotile = yes
+    preserve_split = yes
+}
+
+master {
+    new_is_master = true
+}
+
+gestures {
+    workspace_swipe = on
+}
+
+misc {
+    disable_hyprland_logo = yes
+}</code></pre>
+            </div>
+
+            <h2>Полезные keybindings</h2>
+            <div class="keybindings">
+                <div class="keybinding">
+                    <span class="key-combo">SUPER + Enter</span> - Открыть терминал
+                </div>
+                <div class="keybinding">
+                    <span class="key-combo">SUPER + Q</span> - Закрыть окно
+                </div>
+                <div class="keybinding">
+                    <span class="key-combo">SUPER + D</span> - Запустить меню приложений
+                </div>
+                <div class="keybinding">
+                    <span class="key-combo">SUPER + Shift + S</span> - Сделать скриншот области
+                </div>
+                <div class="keybinding">
+                    <span class="key-combo">SUPER + 1-9</span> - Переключение между рабочими пространствами
+                </div>
+                <div class="keybinding">
+                    <span class="key-combo">SUPER + Shift + 1-9</span> - Переместить окно на рабочее пространство
+                </div>
+            </div>
+
+            <h2>Настройка Waybar</h2>
+            <p>Waybar - это статус бар для Wayland. Мой конфиг:</p>
+
+            <div class="config-block">
+                <h3 class="config-title"><i class="fas fa-bars"></i> ~/.config/waybar/config</h3>
+                <pre><code>{
+    "layer": "top",
+    "position": "top",
+    "height": 30,
+    "modules-left": ["hyprland/workspaces"],
+    "modules-center": ["hyprland/window"],
+    "modules-right": [
+        "pulseaudio",
+        "network",
+        "cpu",
+        "memory",
+        "temperature",
+        "battery",
+        "clock",
+        "tray"
+    ],
+    "hyprland/workspaces": {
+        "format": "{name}",
+        "on-click": "activate"
+    },
+    "clock": {
+        "format": "{:%H:%M}",
+        "tooltip-format": "{:%A, %d %B %Y}"
+    },
+    "cpu": {
+        "format": "{usage}% ",
+        "interval": 5
+    },
+    "memory": {
+        "format": "{}% ",
+        "interval": 5
+    },
+    "network": {
+        "format-wifi": "{essid} ({signalStrength}%) ",
+        "format-ethernet": "{ipaddr} ",
+        "format-disconnected": "Disconnected ⚠",
+        "interval": 5
+    },
+    "pulseaudio": {
+        "format": "{volume}% {icon}",
+        "format-icons": ["", "", ""],
+        "on-click": "pavucontrol"
+    }
+}</code></pre>
+            </div>
+
+            <div class="config-block">
+                <h3 class="config-title"><i class="fas fa-magic"></i> Советы</h3>
+                <ul>
+                    <li>Используйте <code>hyprctl</code> для управления Hyprland из терминала</li>
+                    <li>Для скриншотов установите <code>grim</code> и <code>slurp</code></li>
+                    <li>Для управления яркостью экрана - <code>brightnessctl</code></li>
+                    <li>Для автоматического запуска приложений используйте <code>exec-once</code> в конфиге</li>
+                </ul>
+            </div>
+
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Назад к блогу</a>
+        </article>
+    </div>
+</body>
+</html>

@@ -3,24 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Блог randomhero о Linux, программировании и железе. Архивы статей, руководства и личные проекты.">
+    <meta name="keywords" content="Linux, программирование, Python, Bash, Arch Linux, железо, IT блог">
     <title>Блог /dev/null</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #00ccff;
             --secondary-color: #0066cc;
             --dark-blue: #001a33;
             --text-color: #e6f7ff;
+            --bg-color: var(--dark-blue);
+            --card-bg: rgba(0, 68, 136, 0.3);
+            --header-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
         }
-        
+
+        .light-theme {
+            --primary-color: #0066cc;
+            --secondary-color: #004d99;
+            --dark-blue: #e6f7ff;
+            --text-color: #001a33;
+            --bg-color: var(--dark-blue);
+            --card-bg: rgba(0, 102, 204, 0.1);
+            --header-shadow: 0 0 10px rgba(0, 102, 204, 0.3);
+        }
+
         body {
             margin: 0;
             padding: 0;
-            background: var(--dark-blue);
+            background: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Courier New', monospace;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
             line-height: 1.6;
+            transition: all 0.3s ease;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><rect x="0" y="7" width="16" height="2" fill="%2300ccff"/><rect x="7" y="0" width="2" height="16" fill="%2300ccff"/></svg>'), auto;
         }
-        
+
         canvas {
             display: block;
             position: fixed;
@@ -28,7 +46,7 @@
             left: 0;
             z-index: -1;
         }
-        
+
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -39,29 +57,33 @@
             border-right: 1px solid var(--primary-color);
             min-height: 100vh;
         }
-        
+
+        .light-theme .container {
+            background-color: rgba(230, 247, 255, 0.9);
+        }
+
         header {
             text-align: center;
             padding: 30px 0;
             border-bottom: 1px solid var(--secondary-color);
             margin-bottom: 40px;
         }
-        
+
         h1, h2, h3 {
             color: var(--primary-color);
-            text-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+            text-shadow: var(--header-shadow);
         }
-        
+
         h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
         }
-        
+
         .subtitle {
             color: var(--text-color);
             font-size: 1.2rem;
         }
-        
+
         nav {
             display: flex;
             justify-content: center;
@@ -69,7 +91,7 @@
             margin: 20px 0;
             flex-wrap: wrap;
         }
-        
+
         nav a {
             color: var(--primary-color);
             text-decoration: none;
@@ -78,101 +100,269 @@
             border-radius: 3px;
             transition: all 0.3s;
         }
-        
+
         nav a:hover {
             background-color: var(--primary-color);
             color: var(--dark-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        
+
         .section {
             margin-bottom: 50px;
             padding-bottom: 30px;
             border-bottom: 1px solid var(--secondary-color);
         }
-        
+
         .tech-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
-        
+
         .tech-card {
-            background: rgba(0, 68, 136, 0.3);
+            background: var(--card-bg);
             padding: 15px;
             border-radius: 5px;
             border-left: 3px solid var(--primary-color);
+            transition: transform 0.3s;
         }
-        
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tech-card i {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+
         .hardware-specs {
-            background: rgba(0, 68, 136, 0.3);
+            background: var(--card-bg);
             padding: 20px;
             border-radius: 5px;
             margin-top: 20px;
         }
-        
+
         .spec-item {
             margin-bottom: 10px;
             display: flex;
         }
-        
+
         .spec-label {
             width: 150px;
             color: var(--primary-color);
+            font-weight: bold;
         }
-        
+
         .project-card {
-            background: rgba(0, 68, 136, 0.3);
+            background: var(--card-bg);
             padding: 20px;
             border-radius: 5px;
             margin-bottom: 20px;
             border-left: 3px solid var(--primary-color);
+            transition: transform 0.3s;
         }
-        
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
         .project-links {
             margin-top: 15px;
         }
-        
+
         .project-links a {
             color: var(--primary-color);
             text-decoration: none;
             margin-right: 15px;
             border-bottom: 1px dashed var(--primary-color);
+            transition: all 0.3s;
         }
-        
+
+        .project-links a:hover {
+            border-bottom: 1px solid var(--primary-color);
+        }
+
         footer {
             text-align: center;
             padding: 30px 0;
             margin-top: 50px;
             border-top: 1px solid var(--secondary-color);
         }
-        
+
         .social-links {
             display: flex;
             justify-content: center;
             gap: 20px;
             margin-top: 20px;
         }
-        
+
         .social-links a {
             color: var(--primary-color);
             text-decoration: none;
+            font-size: 1.5rem;
+            transition: transform 0.3s;
         }
-        
+
+        .social-links a:hover {
+            transform: translateY(-3px) scale(1.1);
+        }
+
         code {
             background-color: rgba(0, 102, 204, 0.3);
             padding: 2px 5px;
             border-radius: 3px;
-            font-family: 'Courier New', monospace;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
         }
-        
+
         pre {
             background-color: rgba(0, 0, 0, 0.3);
             padding: 15px;
             border-left: 3px solid var(--primary-color);
             overflow-x: auto;
+            border-radius: 5px;
         }
-        
+
+        .light-theme pre {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Новые стили для добавленных элементов */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        .fact-container {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .fact-button {
+            background: var(--primary-color);
+            color: var(--dark-blue);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .fact-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .terminal {
+            background: rgba(0, 0, 0, 0.7);
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .terminal-body {
+            line-height: 1.5;
+        }
+
+        .command {
+            color: #00ccff;
+        }
+
+        .skill-bar {
+            width: 100%;
+            background-color: rgba(0, 102, 204, 0.2);
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 20px;
+            background-color: var(--primary-color);
+            border-radius: 5px;
+            text-align: right;
+            padding-right: 10px;
+            line-height: 20px;
+            color: var(--dark-blue);
+            font-weight: bold;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .gallery-item {
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid var(--secondary-color);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.03);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .blog-post {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .post-date {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .post-title {
+            margin: 0 0 10px 0;
+        }
+
+        .post-excerpt {
+            margin-bottom: 15px;
+        }
+
+        .read-more {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -198,11 +388,27 @@
                 width: 100%;
                 margin-bottom: 5px;
             }
+
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @font-face {
+            font-family: 'JetBrains Mono';
+            src: url('https://cdnjs.cloudflare.com/ajax/libs/jetbrains-mono/1.0.6/web/woff2/JetBrainsMono-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
         }
     </style>
 </head>
 <body>
     <canvas id="matrix"></canvas>
+    <button class="theme-toggle" id="theme-toggle">
+        <i class="fas fa-moon"></i> Тема
+    </button>
     
     <div class="container">
         <header>
@@ -211,173 +417,285 @@
         </header>
         
         <nav>
-            <a href="#about">Обо мне</a>
-            <a href="#tech">Stack</a>
-            <a href="#hardware">Моё железо</a>
-            <a href="#projects">Проекты</a>
-            <a href="#contact">Контакты</a>
+            <a href="#about"><i class="fas fa-user"></i> Обо мне</a>
+            <a href="#tech"><i class="fas fa-code"></i> Stack</a>
+            <a href="#hardware"><i class="fas fa-laptop"></i> Моё железо</a>
+            <a href="#projects"><i class="fas fa-project-diagram"></i> Проекты</a>
+            <a href="#blog"><i class="fas fa-book"></i> Блог</a>
+            <a href="#contact"><i class="fas fa-envelope"></i> Контакты</a>
         </nav>
         
         <section id="about" class="section">
-            <h2>Обо мне</h2>
+            <h2><i class="fas fa-user"></i> Обо мне</h2>
             <p>Привет! Я Максим, известный в сети как <strong>/dev/null</strong> и <strong>randomhero</strong>. Мой путь в IT начался в 10 лет с командной строки Windows, а теперь я использую Arch Linux и пишу код на Python, Bash, JavaScript и Java.</p>
             
             <p>В этом блоге я рассказываю о своем опыте работы с Linux, программировании и настройке оборудования.</p>
+
+            <div class="fact-container" id="fact-container">
+                Нажмите кнопку, чтобы узнать интересный факт о Linux!
+            </div>
+            <button class="fact-button" id="fact-button">
+                <i class="fas fa-lightbulb"></i> Показать факт
+            </button>
         </section>
         
         <section id="tech" class="section">
-            <h2>Stack</h2>
+            <h2><i class="fas fa-code"></i> Stack</h2>
             <div class="tech-grid">
                 <div class="tech-card">
-                    <h3>Операционные системы</h3>
+                    <h3><i class="fab fa-linux"></i> Операционные системы</h3>
                     <ul>
-                        <li>Arch Linux</li>
-                        <li>Ubuntu Server</li>
-                        <li>Windows 10 (редко)</li>
+                        <li><i class="fas fa-check"></i> Arch Linux</li>
+                        <li><i class="fas fa-check"></i> Ubuntu Server</li>
+                        <li><i class="fas fa-check"></i> Windows 10 (редко)</li>
                     </ul>
                 </div>
                 
                 <div class="tech-card">
-                    <h3>Языки программирования</h3>
+                    <h3><i class="fas fa-laptop-code"></i> Языки программирования</h3>
                     <ul>
-                        <li>Python (основной)</li>
-                        <li>Bash</li>
-                        <li>JavaScript</li>
-                        <li>Java</li>
+                        <li><i class="fab fa-python"></i> Python (основной)</li>
+                        <li><i class="fas fa-terminal"></i> Bash</li>
+                        <li><i class="fab fa-js"></i> JavaScript</li>
+                        <li><i class="fab fa-java"></i> Java</li>
                     </ul>
                 </div>
                 
                 <div class="tech-card">
-                    <h3>Инструменты</h3>
+                    <h3><i class="fas fa-tools"></i> Инструменты</h3>
                     <ul>
-                        <li>Git</li>
-                        <li>Docker</li>
-                        <li>VSCode</li>
-                        <li>Neovim</li>
+                        <li><i class="fab fa-git-alt"></i> Git</li>
+                        <li><i class="fab fa-docker"></i> Docker</li>
+                        <li><i class="fas fa-code"></i> VSCode</li>
+                        <li><i class="fas fa-keyboard"></i> Neovim</li>
                     </ul>
                 </div>
                 
                 <div class="tech-card">
-                    <h3>Другое</h3>
+                    <h3><i class="fas fa-server"></i> Другое</h3>
                     <ul>
-                        <li>Linux administration</li>
-                        <li>Network basics</li>
+                        <li><i class="fas fa-terminal"></i> Linux administration</li>
+                        <li><i class="fas fa-network-wired"></i> Network basics</li>
                     </ul>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;"><i class="fas fa-chart-bar"></i> Уровень навыков</h3>
+            <div>
+                <h4>Python <span style="float: right;">85%</span></h4>
+                <div class="skill-bar">
+                    <div class="skill-progress" style="width: 85%;">85%</div>
+                </div>
+
+                <h4>Bash <span style="float: right;">75%</span></h4>
+                <div class="skill-bar">
+                    <div class="skill-progress" style="width: 75%;">75%</div>
+                </div>
+
+                <h4>JavaScript <span style="float: right;">65%</span></h4>
+                <div class="skill-bar">
+                    <div class="skill-progress" style="width: 65%;">65%</div>
+                </div>
+
+                <h4>Linux Administration <span style="float: right;">80%</span></h4>
+                <div class="skill-bar">
+                    <div class="skill-progress" style="width: 80%;">80%</div>
                 </div>
             </div>
         </section>
         
         <section id="hardware" class="section">
-            <h2>Моё железо: ASUS X540NA</h2>
+            <h2><i class="fas fa-laptop"></i> Моё железо: ASUS X540NA</h2>
             <div class="hardware-specs">
                 <div class="spec-item">
-                    <span class="spec-label">Процессор:</span>
+                    <span class="spec-label"><i class="fas fa-microchip"></i> Процессор:</span>
                     <span>Intel Celeron N3350 (1.1GHz, 2 ядра)</span>
                 </div>
                 <div class="spec-item">
-                    <span class="spec-label">Оперативная память:</span>
+                    <span class="spec-label"><i class="fas fa-memory"></i> Оперативная память:</span>
                     <span>4GB DDR3 </span>
                 </div>
                 <div class="spec-item">
-                    <span class="spec-label">Накопитель:</span>
+                    <span class="spec-label"><i class="fas fa-hdd"></i> Накопитель:</span>
                     <span>240GB HDD → Заменен на 240GB SSD Kingston</span>
                 </div>
                 <div class="spec-item">
-                    <span class="spec-label">Экран:</span>
+                    <span class="spec-label"><i class="fas fa-desktop"></i> Экран:</span>
                     <span>15.6" HD (1366x768)</span>
                 </div>
                 <div class="spec-item">
-                    <span class="spec-label">Графика:</span>
+                    <span class="spec-label"><i class="fas fa-gamepad"></i> Графика:</span>
                     <span>Intel HD Graphics 500</span>
                 </div>
                 <div class="spec-item">
-                    <span class="spec-label">Батарея:</span>
+                    <span class="spec-label"><i class="fas fa-battery-half"></i> Батарея:</span>
                     <span>3-4 часа работы</span>
                 </div>
             </div>
             
-            <h3 style="margin-top: 30px;">Модификации и улучшения</h3>
+            <h3 style="margin-top: 30px;"><i class="fas fa-wrench"></i> Модификации и улучшения</h3>
             <ul>
-                <li>Замена HDD на SSD - главное улучшение для скорости работы</li>
-                <li>Чистка системы охлаждения и замена термопасты</li>
-                <li>Установка Arch Linux для максимальной производительности</li>
-                <li>Использование легковесных wm (hyprland)</li>
+                <li><i class="fas fa-check-circle"></i> Замена HDD на SSD - главное улучшение для скорости работы</li>
+                <li><i class="fas fa-check-circle"></i> Чистка системы охлаждения и замена термопасты</li>
+                <li><i class="fas fa-check-circle"></i> Установка Arch Linux для максимальной производительности</li>
+                <li><i class="fas fa-check-circle"></i> Использование легковесных wm (hyprland)</li>
             </ul>
             
-            <h3 style="margin-top: 30px;">Fastfetch</h3>
+            <h3 style="margin-top: 30px;"><i class="fas fa-balance-scale"></i> Плюсы и минусы</h3>
             <div class="tech-grid" style="margin-top: 20px;">
                 <div class="tech-card">
-                    <h3>Плюсы</h3>
+                    <h3><i class="fas fa-thumbs-up"></i> Плюсы</h3>
                     <ul>
-                        <li>Достаточно портативный</li>
-                        <li>Неплохая клавиатура</li>
-                        <li>Легко апгрейдить</li>
-                        <li>Работает с Linux без проблем</li>
+                        <li><i class="fas fa-check"></i> Достаточно портативный</li>
+                        <li><i class="fas fa-check"></i> Неплохая клавиатура</li>
+                        <li><i class="fas fa-check"></i> Легко апгрейдить</li>
+                        <li><i class="fas fa-check"></i> Работает с Linux без проблем</li>
                     </ul>
                 </div>
                 
                 <div class="tech-card">
-                    <h3>Минусы</h3>
+                    <h3><i class="fas fa-thumbs-down"></i> Минусы</h3>
                     <ul>
-                        <li>Слабый процессор</li>
-                        <li>Плохой экран</li>
-                        <li>Пластиковый корпус</li>
-                        <li>Мало USB-портов</li>
+                        <li><i class="fas fa-times"></i> Слабый процессор</li>
+                        <li><i class="fas fa-times"></i> Плохой экран</li>
+                        <li><i class="fas fa-times"></i> Пластиковый корпус</li>
+                        <li><i class="fas fa-times"></i> Мало USB-портов</li>
                     </ul>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;"><i class="fas fa-images"></i> Галерея</h3>
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/300x200/001a33/00ccff?text=ASUS+X540NA" alt="ASUS X540NA">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/300x200/001a33/00ccff?text=Arch+Linux" alt="Arch Linux">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/300x200/001a33/00ccff?text=Hyprland" alt="Hyprland">
                 </div>
             </div>
         </section>
         
         <section id="projects" class="section">
-            <h2>Мои проекты</h2>
+            <h2><i class="fas fa-project-diagram"></i> Мои проекты</h2>
             
             <div class="project-card">
-                <h3>randomhero/bash-tools</h3>
+                <h3><i class="fab fa-github"></i> randomhero/bash-tools</h3>
                 <p>Набор полезных bash-скриптов для автоматизации работы в Linux. Включает инструменты для бэкапа, мониторинга системы и управления пакетами.</p>
                 <div class="project-links">
-                    <a href="https://github.com/lakladon/bash" target="_blank">GitHub</a>
-                    <a href="#" target="_blank">Документация</a>
+                    <a href="https://github.com/lakladon/bash" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                    <a href="#" target="_blank"><i class="fas fa-book"></i> Документация</a>
                 </div>
             </div>
             
             <div class="project-card">
-                <h3>/dev/null python junior Исправь ошибки</h3>
-                <p>Python игра на tk Задача исправить ошибки в коде.</p>
+                <h3><i class="fas fa-gamepad"></i> /dev/null python junior Исправь ошибки</h3>
+                <p>Python игра на tkinter. Задача исправить ошибки в коде.</p>
                 <div class="project-links">
-                    <a href="https://github.com/lakladon/python-game-for-tk" target="_blank">GitHub</a>
-                    <a href="#" target="_blank">Демо</a>
+                    <a href="https://github.com/lakladon/python-game-for-tk" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                    <a href="#" target="_blank"><i class="fas fa-play"></i> Демо</a>
                 </div>
             </div>
             
             <div class="project-card">
-                <h3>Linux Setup Scripts</h3>
+                <h3><i class="fas fa-terminal"></i> Linux Setup Scripts</h3>
                 <p>Набор скриптов для быстрой настройки Arch Linux и Ubuntu после чистой установки. Автоматизирует установку пакетов и настройку окружения.</p>
                 <div class="project-links">
-                    <a href="https://github.com/lakladon/lss" target="_blank">GitHub</a>
+                    <a href="https://github.com/lakladon/lss" target="_blank"><i class="fab fa-github"></i> GitHub</a>
                 </div>
+            </div>
+
+            <h3 style="margin-top: 30px;"><i class="fas fa-terminal"></i> Терминал</h3>
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span>randomhero@devnull:~$</span>
+                    <span>bash 5.1.16</span>
+                </div>
+                <div class="terminal-body">
+                    <p><span class="command">help</span> - показать доступные команды</p>
+                    <p><span class="command">about</span> - информация обо мне</p>
+                    <p><span class="command">projects</span> - список проектов</p>
+                    <p><span class="command">contact</span> - контактная информация</p>
+                    <p><span class="command">clear</span> - очистить терминал</p>
+                    <br>
+                    <p>Введите команду:</p>
+                    <p>> <span id="terminal-cursor">_</span></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="blog" class="section">
+            <h2><i class="fas fa-book"></i> Последние записи в блоге</h2>
+            
+            <div class="blog-post">
+                <div class="post-date"><i class="far fa-calendar-alt"></i> 15 июня 2023</div>
+                <h3 class="post-title">Установка Arch Linux с нуля</h3>
+                <div class="post-excerpt">
+                    <p>Пошаговое руководство по установке Arch Linux на ноутбук ASUS X540NA. Разбираем процесс разметки диска, установки базовой системы и настройки окружения.</p>
+                </div>
+                <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="blog-post">
+                <div class="post-date"><i class="far fa-calendar-alt"></i> 1 июня 2023</div>
+                <h3 class="post-title">Настройка Hyprland Wayland Compositor</h3>
+                <div class="post-excerpt">
+                    <p>Как я настроил Hyprland на своем слабом ноутбуке для максимальной производительности. Конфиги, скрипты и полезные команды.</p>
+                </div>
+                <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="blog-post">
+                <div class="post-date"><i class="far fa-calendar-alt"></i> 20 мая 2023</div>
+                <h3 class="post-title">30 дней с Neovim</h3>
+                <div class="post-excerpt">
+                    <p>Мой опыт перехода с VSCode на Neovim. Плюсы и минусы, основные плагины и конфигурация для Python разработки.</p>
+                </div>
+                <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
             </div>
         </section>
         
         <section id="contact" class="section">
-            <h2>Контакты</h2>
+            <h2><i class="fas fa-envelope"></i> Контакты</h2>
             <p>Вы можете связаться со мной через:</p>
             <ul>
-                <li>Email: randomhero@mail.ru</li>
-                <li>Telegram: @LakLadon</li>
-                <li>GitHub: github.com/randomhero</li>
+                <li><i class="fas fa-envelope"></i> Email: randomhero@mail.ru</li>
+                <li><i class="fab fa-telegram"></i> Telegram: @LakLadon</li>
+                <li><i class="fab fa-github"></i> GitHub: github.com/randomhero</li>
             </ul>
+
+            <div class="terminal" style="margin-top: 30px;">
+                <div class="terminal-header">
+                    <span>randomhero@devnull:~$</span>
+                    <span>contact.sh</span>
+                </div>
+                <div class="terminal-body">
+                    <p>Свяжитесь со мной для сотрудничества или вопросов:</p>
+                    <p><span class="command">echo "randomhero@mail.ru"</span></p>
+                    <p><span class="command">curl -X POST https://t.me/LakLadon</span></p>
+                    <p><span class="command">git clone https://github.com/lakladon</span></p>
+                </div>
+            </div>
         </section>
         
         <footer>
             <p> Блог /dev/null (randomhero)</p>
             <div class="social-links">
-                <a href="https://github.com/lakladon/" target="_blank">GitHub</a>
-                <a href="https://t.me/LakLadon" target="_blank">Telegram</a>
+                <a href="https://github.com/lakladon/" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://t.me/LakLadon" target="_blank"><i class="fab fa-telegram"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-discord"></i></a>
             </div>
+            <p style="margin-top: 20px; font-size: 0.8rem;">
+                <i class="fas fa-terminal"></i> Сделано с <i class="fas fa-heart" style="color: #ff0000;"></i> на Arch Linux
+            </p>
         </footer>
     </div>
     
     <script>
+        // Matrix effect
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
 
@@ -417,6 +735,78 @@
             canvas.height = window.innerHeight;
             canvas.width = window.innerWidth;
         });
+
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const icon = themeToggle.querySelector('i');
+
+        // Check for saved theme preference
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        if (currentTheme === 'light') {
+            document.body.classList.add('light-theme');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            
+            if (document.body.classList.contains('light-theme')) {
+                localStorage.setItem('theme', 'light');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                localStorage.setItem('theme', 'dark');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+
+        // Fact generator
+        const facts = [
+            "Linux используется на всех 500 самых мощных суперкомпьютерах мира.",
+            "Пингвин Tux — официальный талисман Linux.",
+            "Первый релиз ядра Linux состоялся в 1991 году.",
+            "Android работает на ядре Linux.",
+            "Более 90% облачной инфраструктуры работает на Linux.",
+            "Исходный код Linux состоит из более чем 27 миллионов строк кода.",
+            "Linux используется на Международной космической станции.",
+            "Архитектура Linux используется в 100% топ-500 суперкомпьютеров мира."
+        ];
+
+        const factContainer = document.getElementById('fact-container');
+        const factButton = document.getElementById('fact-button');
+
+        factButton.addEventListener('click', () => {
+            const randomFact = facts[Math.floor(Math.random() * facts.length)];
+            factContainer.textContent = randomFact;
+        });
+
+        // Terminal simulation
+        const terminalCursor = document.getElementById('terminal-cursor');
+        let cursorVisible = true;
+
+        setInterval(() => {
+            cursorVisible = !cursorVisible;
+            terminalCursor.style.opacity = cursorVisible ? '1' : '0';
+        }, 500);
+
+        // PWA setup
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('ServiceWorker registration successful');
+                }).catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+
+        // Add manifest for PWA
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = '/manifest.json';
+        document.head.appendChild(link);
     </script>
 </body>
 </html>

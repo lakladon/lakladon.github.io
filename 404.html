@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница не найдена | /dev/null</title>
+    <style>
+        :root {
+            --primary-color: #00ccff;
+            --secondary-color: #0066cc;
+            --dark-blue: #001a33;
+            --text-color: #e6f7ff;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--dark-blue);
+            color: var(--text-color);
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        
+        canvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 800px;
+            padding: 40px;
+            background-color: rgba(0, 26, 51, 0.7);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--primary-color);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 204, 255, 0.2);
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            font-size: 5rem;
+            margin: 0;
+            text-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+            animation: pulse 2s infinite;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        p {
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        
+        .terminal {
+            background: rgba(0, 0, 0, 0.3);
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 20px auto;
+            max-width: 500px;
+            text-align: left;
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .command {
+            color: var(--primary-color);
+        }
+        
+        .links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .link {
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .link:hover {
+            background-color: var(--primary-color);
+            color: var(--dark-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 204, 255, 0.3);
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; text-shadow: 0 0 20px rgba(0, 204, 255, 0.8); }
+            100% { opacity: 0.8; }
+        }
+        
+        @media (max-width: 600px) {
+            h1 { font-size: 3rem; }
+            .container { padding: 20px; }
+            .links { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    
+    <div class="container">
+        <h1>404</h1>
+        <h2>Страница не найдена</h2>
+        <p>Похоже, вы пытаетесь обратиться к несуществующей странице.<br>Возможно, она была перемещена или удалена.</p>
+        
+        <div class="terminal">
+            <span class="command">user@devnull:~$</span> curl -i https://devnull.blog/{{path}}<br>
+            <span class="command">HTTP/1.1 404 Not Found</span><br>
+            Content-Type: text/html<br>
+            X-Error: Страница не существует<br><br>
+            <span class="command">Возможные решения:</span><br>
+            1. Проверьте URL на опечатки<br>
+            2. Вернитесь на <a href="/" style="color: var(--primary-color);">главную страницу</a><br>
+            3. Используйте поиск по сайту
+        </div>
+        
+        <div class="links">
+            <a href="/" class="link">Главная страница</a>
+            <a href="#about" class="link">Обо мне</a>
+            <a href="#projects" class="link">Проекты</a>
+            <a href="#contact" class="link">Контакты</a>
+        </div>
+    </div>
+    
+    <script>
+        // Matrix effect
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+
+        const chars = '01';
+        const fontSize = 20;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let x = 0; x < columns; x++) {
+            drops[x] = Math.random() * 100;
+        }
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 26, 51, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00ccff';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height || Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 33);
+
+        window.addEventListener('resize', () => {
+            canvas.height = window.innerHeight;
+            canvas.width = window.innerWidth;
+        });
+
+        // Immediate button response
+        document.querySelectorAll('.link').forEach(link => {
+            link.style.touchAction = 'manipulation';
+            link.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>

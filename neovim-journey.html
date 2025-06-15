@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30 дней с Neovim | /dev/null</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00ff99;
+            --secondary-color: #009966;
+            --dark-green: #003322;
+            --text-color: #e6fff7;
+            --bg-color: var(--dark-green);
+            --card-bg: rgba(0, 68, 51, 0.3);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(0, 51, 34, 0.7);
+            backdrop-filter: blur(5px);
+            border-left: 1px solid var(--primary-color);
+            border-right: 1px solid var(--primary-color);
+            min-height: 100vh;
+        }
+
+        .article-header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--secondary-color);
+            margin-bottom: 30px;
+        }
+
+        .article-title {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .article-meta {
+            color: var(--text-color);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .article-content {
+            padding: 0 10px;
+        }
+
+        .day-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .day-title {
+            color: var(--primary-color);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .day-number {
+            background: var(--primary-color);
+            color: var(--dark-green);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        pre {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-left: 3px solid var(--primary-color);
+            overflow-x: auto;
+            border-radius: 5px;
+        }
+
+        code {
+            background-color: rgba(0, 153, 102, 0.3);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+        }
+
+        .plugin-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .plugin-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .plugin-name {
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: var(--primary-color);
+            text-decoration: none;
+            border: 1px solid var(--primary-color);
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background-color: var(--primary-color);
+            color: var(--dark-green);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .article-title {
+                font-size: 1.8rem;
+            }
+            
+            .plugin-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="article-header">
+            <h1 class="article-title"><i class="fas fa-code"></i> 30 дней с Neovim</h1>
+            <div class="article-meta">
+                <span><i class="far fa-calendar-alt"></i> 20 мая 2023</span>
+                <span><i class="far fa-clock"></i> 12 мин чтения</span>
+            </div>
+        </header>
+
+        <article class="article-content">
+            <p>После 5 лет использования VSCode я решил перейти на Neovim. Вот мой опыт, конфиги и полезные советы.</p>
+
+            <div class="day-card">
+                <h3 class="day-title"><span class="day-number">1</span> Установка и базовый конфиг</h3>
+                <p>Установка на Arch Linux:</p>
+                <pre><code>sudo pacman -S neovim</code></pre>
+                <p>Базовый конфиг <code>~/.config/nvim/init.vim</code>:</p>
+                <pre><code>" Настройки
+set number
+set relativenumber
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set smartindent
+set mouse=a
+
+" Клавиши
+nnoremap &lt;space&gt; :
+let mapleader = " "
+
+" Плагины (будем устанавливать позже)
+call plug#begin('~/.vim/plugged')
+call plug#end()</code></pre>
+            </div>
+
+            <div class="day-card">
+                <h3 class="day-title"><span class="day-number">3</span> Установка менеджера плагинов</h3>
+                <p>Я выбрал vim-plug. Установка:</p>
+                <pre><code>sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'</code></pre>
+                <p>После установки запустите <code>:PlugInstall</code> в Neovim.</p>
+            </div>
+
+            <div class="day-card">
+                <h3 class="day-title"><span class="day-number">7</span> Мои must-have плагины</h3>
+                <div class="plugin-list">
+                    <div class="plugin-card">
+                        <div class="plugin-name">nvim-treesitter</div>
+                        <p>Улучшенное выделение синтаксиса</p>
+                    </div>
+                    <div class="plugin-card">
+                        <div class="plugin-name">telescope.nvim</div>
+                        <p>Файловый поиск и многое другое</p>
+                    </div>
+                    <div class="plugin-card">
+                        <div class="plugin-name">lualine.nvim</div>
+                        <p>Красивая статусная строка</p>
+                    </div>
+                    <div class="plugin-card">
+                        <div class="plugin-name">nvim-cmp</div>
+                        <p>Автодополнение кода</p>
+                    </div>
+                    <div class="plugin-card">
+                        <div class="plugin-name">nvim-lspconfig</div>
+                        <p>Интеграция с LSP</p>
+                    </div>
+                    <div class="plugin-card">
+                        <div class="plugin-name">gitsigns.nvim</div>
+                        <p>Интеграция с Git</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-card">
+                <h3 class="day-title"><span class="day-number">10</span> Настройка LSP</h3>
+                <p>Для Python разработки:</p>
+                <pre><code>" LSP config
+lua &lt;&lt; EOF
+require'lspconfig'.pyright.setup{}
+EOF
+
+" Автодополнение
+autocmd BufEnter * lua require'cmp'.setup.buffer { sources = { { name = 'nvim_lsp' } } }</code></pre>
+                <p>Установите серверы LSP:</p>
+                <pre><code>npm install -g pyright
+sudo pacman -S python-lsp-server</code></pre>
+            </div>
+
+            <div class="day-card">
+                <h3 class="day-title"><span class="day-number">15</span> Полезные keybindings</h3>
+                <pre><code>" Перемещение между окнами
+nnoremap &lt;C-h&gt; &lt;C-w&gt;h
+nnoremap &lt;C-j&gt; &lt;C-w&gt;j
+nnoremap &lt;C-k&gt; &lt;C-w&gt;k
+nnoremap &lt;C-l&gt; &lt;C-w&gt;l
+
+" Поиск файлов с Telescope
+nnoremap &lt;leader&gt;ff &lt;cmd&gt;Telescope find_files&lt;cr&gt;
+nnoremap &lt;leader&gt;fg &lt;cmd&gt;Telescope live_grep&lt;cr&gt;
+nnoremap &lt;leader&gt;fb &lt;cmd&gt;Telescope buffers&lt;cr&gt;
+nnoremap &lt;leader&gt;fh &lt;cmd&gt;Telescope help_tags&lt;cr&gt;
+
+" Git
+nnoremap &lt;leader&gt;gs &lt;cmd&gt;Gitsigns stage_hunk&lt;cr&gt;
+nnoremap &lt;leader&gt;gr &lt;cmd&gt;Gitsigns reset_hunk&lt;cr&gt;</code></pre>
+            </div>
+
+            <div class="day-card">
+                <h3 class="day-title"><span class="day-number">20</span> Настройка внешнего вида</h3>
+                <p>Моя тема - gruvbox. Установка:</p>
+                <pre><code>Plug 'morhetz/gruvbox'
+
+" В init.vim
+colorscheme gruvbox
+set background=dark</code></pre>
+                <p>Конфиг lualine:</p>
+                <pre><code>lua &lt;&lt; EOF
+require('lualine').setup {
+  options = {
+    theme = 'gruvbox',
+    section_separators = { left = '', right = '' },
+    component_separators = { left = '', right = '' }
+  }
+}
+EOF</code></pre>
+            </div>
+
+            <div class="day-card">
+                <h3 class="day-title"><span class="day-number">30</span> Итоги</h3>
+                <p><strong>Плюсы:</strong></p>
+                <ul>
+                    <li>Невероятная скорость работы</li>
+                    <li>Полный контроль над редактором</li>
+                    <li>Минимальное потребление ресурсов</li>
+                    <li>Работает везде (даже по SSH)</li>
+                </ul>
+                <p><strong>Минусы:</strong></p>
+                <ul>
+                    <li>Крутая кривая обучения</li>
+                    <li>Требуется время на настройку</li>
+                    <li>Нет встроенной интеграции с некоторыми инструментами</li>
+                </ul>
+                <p><strong>Вывод:</strong> Neovim стал моим основным редактором. Для больших проектов иногда возвращаюсь к VSCode, но 90% работы теперь делаю в Neovim.</p>
+            </div>
+
+            <h2>Мой текущий конфиг</h2>
+            <p>Полный конфиг доступен на GitHub: <a href="https://github.com/lakladon/nvim-config" style="color: var(--primary-color);">github.com/lakladon/nvim-config</a></p>
+
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Назад к блогу</a>
+        </article>
+    </div>
+</body>
+</html>

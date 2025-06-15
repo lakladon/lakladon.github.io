@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Блог /dev/null</title>
+    <style>
+        :root {
+            --primary-color: #00ccff;
+            --secondary-color: #0066cc;
+            --dark-blue: #001a33;
+            --text-color: #e6f7ff;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--dark-blue);
+            color: var(--text-color);
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+        }
+        
+        canvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(0, 26, 51, 0.7);
+            backdrop-filter: blur(5px);
+            border-left: 1px solid var(--primary-color);
+            border-right: 1px solid var(--primary-color);
+            min-height: 100vh;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--secondary-color);
+            margin-bottom: 40px;
+        }
+        
+        h1, h2, h3 {
+            color: var(--primary-color);
+            text-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: var(--text-color);
+            font-size: 1.2rem;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid var(--primary-color);
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+        
+        nav a:hover {
+            background-color: var(--primary-color);
+            color: var(--dark-blue);
+        }
+        
+        .section {
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--secondary-color);
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .tech-card {
+            background: rgba(0, 68, 136, 0.3);
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .hardware-specs {
+            background: rgba(0, 68, 136, 0.3);
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .spec-item {
+            margin-bottom: 10px;
+            display: flex;
+        }
+        
+        .spec-label {
+            width: 150px;
+            color: var(--primary-color);
+        }
+        
+        .project-card {
+            background: rgba(0, 68, 136, 0.3);
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .project-links {
+            margin-top: 15px;
+        }
+        
+        .project-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin-right: 15px;
+            border-bottom: 1px dashed var(--primary-color);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid var(--secondary-color);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        code {
+            background-color: rgba(0, 102, 204, 0.3);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        pre {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-left: 3px solid var(--primary-color);
+            overflow-x: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+            }
+            
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .spec-item {
+                flex-direction: column;
+            }
+            
+            .spec-label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    
+    <div class="container">
+        <header>
+            <h1>/dev/null</h1>
+            <div class="subtitle">Блог randomhero о Linux, программировании и железе</div>
+        </header>
+        
+        <nav>
+            <a href="#about">Обо мне</a>
+            <a href="#tech">Stack</a>
+            <a href="#hardware">Моё железо</a>
+            <a href="#projects">Проекты</a>
+            <a href="#contact">Контакты</a>
+        </nav>
+        
+        <section id="about" class="section">
+            <h2>Обо мне</h2>
+            <p>Привет! Я Максим, известный в сети как <strong>/dev/null</strong> и <strong>randomhero</strong>. Мой путь в IT начался в 10 лет с командной строки Windows, а теперь я использую Arch Linux и пишу код на Python, Bash, JavaScript и Java.</p>
+            
+            <p>В этом блоге я рассказываю о своем опыте работы с Linux, программировании и настройке оборудования.</p>
+        </section>
+        
+        <section id="tech" class="section">
+            <h2>Stack</h2>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h3>Операционные системы</h3>
+                    <ul>
+                        <li>Arch Linux</li>
+                        <li>Ubuntu Server</li>
+                        <li>Windows 10 (редко)</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-card">
+                    <h3>Языки программирования</h3>
+                    <ul>
+                        <li>Python (основной)</li>
+                        <li>Bash</li>
+                        <li>JavaScript</li>
+                        <li>Java</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-card">
+                    <h3>Инструменты</h3>
+                    <ul>
+                        <li>Git</li>
+                        <li>Docker</li>
+                        <li>VSCode</li>
+                        <li>Neovim</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-card">
+                    <h3>Другое</h3>
+                    <ul>
+                        <li>Linux administration</li>
+                        <li>Network basics</li>
+                        <li>CI/CD</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section id="hardware" class="section">
+            <h2>Моё железо: ASUS X540NA</h2>
+            <div class="hardware-specs">
+                <div class="spec-item">
+                    <span class="spec-label">Процессор:</span>
+                    <span>Intel Celeron N3350 (1.1GHz, 2 ядра)</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Оперативная память:</span>
+                    <span>4GB DDR3 </span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Накопитель:</span>
+                    <span>240GB HDD → Заменен на 240GB SSD Kingston</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Экран:</span>
+                    <span>15.6" HD (1366x768)</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Графика:</span>
+                    <span>Intel HD Graphics 500</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Батарея:</span>
+                    <span>3-4 часа работы</span>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 30px;">Модификации и улучшения</h3>
+            <ul>
+                <li>Замена HDD на SSD - главное улучшение для скорости работы</li>
+                <li>Чистка системы охлаждения и замена термопасты</li>
+                <li>Установка Arch Linux для максимальной производительности</li>
+                <li>Использование легковесных wm (hyprland)</li>
+            </ul>
+            
+            <h3 style="margin-top: 30px;">Fastfetch</h3>
+            <div class="tech-grid" style="margin-top: 20px;">
+                <div class="tech-card">
+                    <h3>Плюсы</h3>
+                    <ul>
+                        <li>Достаточно портативный</li>
+                        <li>Неплохая клавиатура</li>
+                        <li>Легко апгрейдить</li>
+                        <li>Работает с Linux без проблем</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-card">
+                    <h3>Минусы</h3>
+                    <ul>
+                        <li>Слабый процессор</li>
+                        <li>Плохой экран</li>
+                        <li>Пластиковый корпус</li>
+                        <li>Мало USB-портов</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section id="projects" class="section">
+            <h2>Мои проекты</h2>
+            
+            <div class="project-card">
+                <h3>randomhero/bash-tools</h3>
+                <p>Набор полезных bash-скриптов для автоматизации работы в Linux. Включает инструменты для бэкапа, мониторинга системы и управления пакетами.</p>
+                <div class="project-links">
+                    <a href="https://github.com/lakladon/bash" target="_blank">GitHub</a>
+                    <a href="#" target="_blank">Документация</a>
+                </div>
+            </div>
+            
+            <div class="project-card">
+                <h3>/dev/null python junior Исправь ошибки</h3>
+                <p>Python игра на tk Задача исправить ошибки в коде.</p>
+                <div class="project-links">
+                    <a href="https://github.com/lakladon/python-game-for-tk" target="_blank">GitHub</a>
+                    <a href="#" target="_blank">Демо</a>
+                </div>
+            </div>
+            
+            <div class="project-card">
+                <h3>Linux Setup Scripts</h3>
+                <p>Набор скриптов для быстрой настройки Arch Linux и Ubuntu после чистой установки. Автоматизирует установку пакетов и настройку окружения.</p>
+                <div class="project-links">
+                    <a href="https://github.com/lakladon/lss" target="_blank">GitHub</a>
+                </div>
+            </div>
+        </section>
+        
+        <section id="contact" class="section">
+            <h2>Контакты</h2>
+            <p>Вы можете связаться со мной через:</p>
+            <ul>
+                <li>Email: randomhero@mail.ru</li>
+                <li>Telegram: @LakLadon</li>
+                <li>GitHub: github.com/randomhero</li>
+            </ul>
+        </section>
+        
+        <footer>
+            <p> Блог /dev/null (randomhero)</p>
+            <div class="social-links">
+                <a href="https://github.com/lakladon/" target="_blank">GitHub</a>
+                <a href="https://t.me/LakLadon" target="_blank">Telegram</a>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+
+        const chars = '我叫伊拉我是学生我在大学学习外语我会说英语和汉语因为我和我的朋友学习汉语所以我们要在假期去中国了解中国文化练习汉语口语安德烈说我们在中国可以报语言学校1佩佳找到了一所学校于是我买了飞机票卡佳在宾馆订了两间房间拿到签证以后我们就出发今天（二月二日星期一是我们在北京的第一天ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?йцукенгшщзхъфывапярчисмотльдбжюэ.';
+        const fontSize = 20;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let x = 0; x < columns; x++) {
+            drops[x] = 1000;
+        }
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 26, 51, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00ccff';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 33);
+
+        window.addEventListener('resize', () => {
+            canvas.height = window.innerHeight;
+            canvas.width = window.innerWidth;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Установка Arch Linux с нуля | /dev/null</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Основные стили из главной страницы */
+        :root {
+            --primary-color: #00ccff;
+            --secondary-color: #0066cc;
+            --dark-blue: #001a33;
+            --text-color: #e6f7ff;
+            --bg-color: var(--dark-blue);
+            --card-bg: rgba(0, 68, 136, 0.3);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(0, 26, 51, 0.7);
+            backdrop-filter: blur(5px);
+            border-left: 1px solid var(--primary-color);
+            border-right: 1px solid var(--primary-color);
+            min-height: 100vh;
+        }
+
+        /* Стили для страницы статьи */
+        .article-header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--secondary-color);
+            margin-bottom: 30px;
+        }
+
+        .article-title {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .article-meta {
+            color: var(--text-color);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .article-content {
+            padding: 0 10px;
+        }
+
+        .article-content img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin: 20px 0;
+            border: 1px solid var(--secondary-color);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: var(--primary-color);
+            text-decoration: none;
+            border: 1px solid var(--primary-color);
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background-color: var(--primary-color);
+            color: var(--dark-blue);
+        }
+
+        .steps {
+            counter-reset: step-counter;
+            margin: 30px 0;
+        }
+
+        .step {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 30px;
+            counter-increment: step-counter;
+        }
+
+        .step:before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--primary-color);
+            color: var(--dark-blue);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .warning {
+            background: rgba(204, 0, 0, 0.2);
+            border-left: 3px solid #cc0000;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .note {
+            background: rgba(0, 204, 255, 0.1);
+            border-left: 3px solid var(--primary-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        pre {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-left: 3px solid var(--primary-color);
+            overflow-x: auto;
+            border-radius: 5px;
+        }
+
+        code {
+            background-color: rgba(0, 102, 204, 0.3);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .article-title {
+                font-size: 1.8rem;
+            }
+            
+            .step {
+                padding-left: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="article-header">
+            <h1 class="article-title"><i class="fab fa-linux"></i> Установка Arch Linux с нуля</h1>
+            <div class="article-meta">
+                <span><i class="far fa-calendar-alt"></i> 15 июня 2023</span>
+                <span><i class="far fa-clock"></i> 15 мин чтения</span>
+            </div>
+        </header>
+
+        <article class="article-content">
+            <p>В этом руководстве я подробно опишу процесс установки Arch Linux на ноутбук ASUS X540NA. Это мой личный проверенный метод, который я использовал несколько раз.</p>
+
+            <div class="warning">
+                <strong><i class="fas fa-exclamation-triangle"></i> Внимание!</strong> Этот процесс сотрёт все данные на вашем диске. Сделайте резервную копию важных файлов.
+            </div>
+
+            <h2>Подготовка</h2>
+            <p>Вам понадобится:</p>
+            <ul>
+                <li>USB-накопитель (минимум 2GB)</li>
+                <li>Стабильное интернет-соединение</li>
+                <li>Доступ к UEFI/BIOS (обычно клавиша F2 или Del при загрузке)</li>
+            </ul>
+
+            <h2>Шаги установки</h2>
+            <div class="steps">
+                <div class="step">
+                    <h3>Создание загрузочной флешки</h3>
+                    <p>Скачайте образ Arch Linux с официального сайта:</p>
+                    <pre><code>wget https://archlinux.org/iso/latest/archlinux-x86_64.iso</code></pre>
+                    <p>Запишите образ на USB (замените /dev/sdX на ваше устройство):</p>
+                    <pre><code>sudo dd if=archlinux-x86_64.iso of=/dev/sdX bs=4M status=progress oflag=sync</code></pre>
+                </div>
+
+                <div class="step">
+                    <h3>Загрузка в Live-окружение</h3>
+                    <p>Перезагрузите компьютер и зайдите в BIOS/UEFI. Установите приоритет загрузки с USB. После загрузки вы увидите приглашение командной строки.</p>
+                    <p>Проверьте режим загрузки:</p>
+                    <pre><code>ls /sys/firmware/efi/efivars</code></pre>
+                    <p>Если команда не выдаёт ошибку, значит система загрузилась в UEFI режиме.</p>
+                </div>
+
+                <div class="step">
+                    <h3>Подключение к интернету</h3>
+                    <p>Для проводного соединения:</p>
+                    <pre><code>dhcpcd</code></pre>
+                    <p>Для Wi-Fi:</p>
+                    <pre><code>iwctl
+station wlan0 connect SSID</code></pre>
+                    <p>Проверьте соединение:</p>
+                    <pre><code>ping archlinux.org</code></pre>
+                </div>
+
+                <div class="step">
+                    <h3>Разметка диска</h3>
+                    <p>Определите ваш диск:</p>
+                    <pre><code>fdisk -l</code></pre>
+                    <p>Создайте разделы (пример для UEFI/GPT):</p>
+                    <pre><code>cfdisk /dev/sda
+# 1. 512M EFI System
+# 2. Оставшееся пространство Linux filesystem</code></pre>
+                    <p>Форматирование:</p>
+                    <pre><code>mkfs.fat -F32 /dev/sda1
+mkfs.ext4 /dev/sda2</code></pre>
+                </div>
+
+                <div class="step">
+                    <h3>Монтирование и установка базовой системы</h3>
+                    <pre><code>mount /dev/sda2 /mnt
+mkdir /mnt/boot
+mount /dev/sda1 /mnt/boot
+pacstrap /mnt base linux linux-firmware</code></pre>
+                </div>
+
+                <div class="step">
+                    <h3>Настройка системы</h3>
+                    <p>Сгенерируйте fstab:</p>
+                    <pre><code>genfstab -U /mnt >> /mnt/etc/fstab</code></pre>
+                    <p>Перейдите в установленную систему:</p>
+                    <pre><code>arch-chroot /mnt</code></pre>
+                    <p>Установите часовой пояс:</p>
+                    <pre><code>ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
+hwclock --systohc</code></pre>
+                    <p>Настройте локаль:</p>
+                    <pre><code>nano /etc/locale.gen # раскомментируйте нужные локали
+locale-gen
+echo "LANG=en_US.UTF-8" > /etc/locale.conf</code></pre>
+                </div>
+
+                <div class="step">
+                    <h3>Установка загрузчика</h3>
+                    <p>Для UEFI:</p>
+                    <pre><code>pacman -S grub efibootmgr
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+grub-mkconfig -o /boot/grub/grub.cfg</code></pre>
+                </div>
+
+                <div class="step">
+                    <h3>Завершение установки</h3>
+                    <p>Установите пароль root:</p>
+                    <pre><code>passwd</code></pre>
+                    <p>Создайте пользователя:</p>
+                    <pre><code>useradd -m -G wheel -s /bin/bash username
+passwd username</code></pre>
+                    <p>Настройте sudo:</p>
+                    <pre><code>EDITOR=nano visudo # раскомментируйте %wheel ALL=(ALL) ALL</code></pre>
+                    <p>Выйдите из chroot и перезагрузитесь:</p>
+                    <pre><code>exit
+umount -R /mnt
+reboot</code></pre>
+                </div>
+            </div>
+
+            <div class="note">
+                <strong><i class="fas fa-lightbulb"></i> Совет:</strong> После первой загрузки установите необходимые пакеты: networkmanager, sudo, nano, dhcpcd и другие.
+            </div>
+
+            <h2>Пост-установка</h2>
+            <p>Рекомендуемые действия после установки:</p>
+            <ol>
+                <li>Установите графическое окружение (если нужно)</li>
+                <li>Настройте сеть (NetworkManager или systemd-networkd)</li>
+                <li>Установите драйверы для вашего оборудования</li>
+                <li>Настройте зеркала для pacman</li>
+            </ol>
+
+            <p>Для настройки зеркал в России рекомендую:</p>
+            <pre><code>sudo nano /etc/pacman.d/mirrorlist
+# Добавьте в начало:
+Server = https://mirror.yandex.ru/archlinux/$repo/os/$arch
+Server = https://mirror.truenetwork.ru/archlinux/$repo/os/$arch</code></pre>
+
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Назад к блогу</a>
+        </article>
+    </div>
+</body>
+</html>

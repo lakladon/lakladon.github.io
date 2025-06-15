@@ -312,30 +312,6 @@
             font-weight: bold;
         }
 
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .gallery-item {
-            border-radius: 5px;
-            overflow: hidden;
-            border: 1px solid var(--secondary-color);
-            transition: transform 0.3s;
-        }
-
-        .gallery-item:hover {
-            transform: scale(1.03);
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
         .blog-post {
             background: var(--card-bg);
             padding: 20px;
@@ -563,8 +539,6 @@
                     </ul>
                 </div>
             </div>
-
-            
         </section>
         
         <section id="projects" class="section">
@@ -624,7 +598,7 @@
                 <div class="post-excerpt">
                     <p>Пошаговое руководство по установке Arch Linux на ноутбук ASUS X540NA. Разбираем процесс разметки диска, установки базовой системы и настройки окружения.</p>
                 </div>
-                <a href="arch-install.html" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
+                <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
             </div>
             
             <div class="blog-post">
@@ -633,7 +607,7 @@
                 <div class="post-excerpt">
                     <p>Как я настроил Hyprland на своем слабом ноутбуке для максимальной производительности. Конфиги, скрипты и полезные команды.</p>
                 </div>
-                <a href="hyprland-setup.html" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
+                <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
             </div>
             
             <div class="blog-post">
@@ -642,7 +616,7 @@
                 <div class="post-excerpt">
                     <p>Мой опыт перехода с VSCode на Neovim. Плюсы и минусы, основные плагины и конфигурация для Python разработки.</p>
                 </div>
-                <a href="neovim-journey" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
+                <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
             </div>
         </section>
         
@@ -650,9 +624,10 @@
             <h2><i class="fas fa-envelope"></i> Контакты</h2>
             <p>Вы можете связаться со мной через:</p>
             <ul>
-                <li><i class="fas fa-envelope"></i> Email: randomhero@internet.ruli>
+                <li><i class="fas fa-envelope"></i> Email: randomhero@internet.ru</li>
                 <li><i class="fab fa-telegram"></i> Telegram: @LakLadon</li>
-                <li><i class="fab fa-github"></i> GitHub: github.com/randomhero</li>
+                <li><i class="fab fa-discord"></i> Discord: @megaprokuror</li>
+                <li><i class="fab fa-github"></i> GitHub: github.com/lakladon</li>
             </ul>
 
             <div class="terminal" style="margin-top: 30px;">
@@ -664,6 +639,7 @@
                     <p>Свяжитесь со мной для сотрудничества или вопросов:</p>
                     <p><span class="command">echo "randomhero@internet.ru"</span></p>
                     <p><span class="command">curl -X POST https://t.me/LakLadon</span></p>
+                    <p><span class="command">discord connect @megaprokuror</span></p>
                     <p><span class="command">git clone https://github.com/lakladon</span></p>
                 </div>
             </div>
@@ -674,7 +650,7 @@
             <div class="social-links">
                 <a href="https://github.com/lakladon/" target="_blank"><i class="fab fa-github"></i></a>
                 <a href="https://t.me/LakLadon" target="_blank"><i class="fab fa-telegram"></i></a>
-                <a href="#" target="_blank"><i class="fab fa-discord"></i></a>
+                <a href="https://discord.com/users/megaprokuror" target="_blank"><i class="fab fa-discord"></i></a>
             </div>
             <p style="margin-top: 20px; font-size: 0.8rem;">
                 <i class="fas fa-terminal"></i> Сделано с <i class="fas fa-heart" style="color: #ff0000;"></i> на Arch Linux
@@ -760,7 +736,6 @@
             "Исходный код Linux состоит из более чем 27 миллионов строк кода.",
             "Linux используется на Международной космической станции.",
             "Архитектура Linux используется в 100% топ-500 суперкомпьютеров мира."
-            "Пасхалко пасхалко пасхалочка"
         ];
 
         const factContainer = document.getElementById('fact-container');

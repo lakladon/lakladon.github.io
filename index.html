@@ -69,8 +69,9 @@
             margin-bottom: 40px;
         }
 
-        h1, h2, h3 {
+        h1, h2, h3, h4 {
             color: var(--primary-color);
+            margin-top: 0;
         }
 
         h1 {
@@ -108,7 +109,7 @@
 
         .section {
             margin-bottom: 50px;
-            padding: 20px;
+            padding: 25px;
             background: var(--card-bg);
             border-radius: 10px;
             border-left: 4px solid var(--primary-color);
@@ -129,6 +130,11 @@
             border-radius: 8px;
             text-align: center;
             border: 1px solid var(--primary-color);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
         }
 
         .stat-number {
@@ -184,7 +190,6 @@
             background: rgba(0, 68, 136, 0.2);
             border-radius: 10px;
             overflow: hidden;
-            position: relative;
         }
 
         .calendar-wrapper {
@@ -210,13 +215,6 @@
         .github-calendar {
             min-width: 800px;
             width: 100%;
-        }
-
-        .calendar-image {
-            width: 100%;
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
         }
 
         .loading {
@@ -263,17 +261,82 @@
             font-family: inherit;
         }
 
-        .graph-container {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 10px;
+        /* Стили для графика языков */
+        .languages-section {
+            margin-top: 30px;
+        }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
             margin-top: 20px;
+        }
+
+        .chart-wrapper {
+            background: rgba(0, 68, 136, 0.2);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid var(--primary-color);
+        }
+
+        .chart-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary-color);
         }
 
         .chart-container {
             position: relative;
-            height: 300px;
+            height: 350px;
             width: 100%;
+        }
+
+        .language-details {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 102, 204, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .language-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .language-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 12px;
+            background: rgba(0, 68, 136, 0.3);
+            border-radius: 20px;
+            border: 1px solid var(--primary-color);
+        }
+
+        .language-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .language-name {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .language-count {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .language-percentage {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            margin-left: 5px;
         }
 
         .calendar-info {
@@ -316,18 +379,56 @@
             text-align: center;
         }
 
+        /* Таблица языков */
+        .languages-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .languages-table th,
+        .languages-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 204, 255, 0.2);
+        }
+
+        .languages-table th {
+            background: rgba(0, 102, 204, 0.2);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .languages-table tr:hover {
+            background: rgba(0, 204, 255, 0.1);
+        }
+
+        .table-language-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @media (max-width: 1024px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
                 width: 100%;
                 max-width: 100%;
-                overflow-x: hidden;
             }
             
             .section {
-                padding: 15px;
+                padding: 20px;
                 margin-bottom: 30px;
-                width: 100%;
             }
             
             nav {
@@ -372,6 +473,15 @@
                 height: 250px;
             }
             
+            .charts-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .chart-wrapper {
+                padding: 20px;
+            }
+            
             h1 {
                 font-size: 2rem;
             }
@@ -387,7 +497,7 @@
             }
             
             .section {
-                padding: 12px;
+                padding: 15px;
             }
             
             .github-calendar {
@@ -401,6 +511,19 @@
             .github-stats {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
+            }
+            
+            .chart-container {
+                height: 220px;
+            }
+            
+            .languages-table {
+                font-size: 0.85rem;
+            }
+            
+            .languages-table th,
+            .languages-table td {
+                padding: 8px 10px;
             }
         }
 
@@ -419,11 +542,12 @@
     <div class="container">
         <header>
             <h1><i class="fab fa-github"></i> /dev/null</h1>
-            <div class="subtitle">GitHub активность: @lakladon</div>
+            <div class="subtitle">GitHub активность: @lakladon | Статистика языков программирования</div>
         </header>
         
         <nav>
             <a href="#github-stats"><i class="fas fa-chart-line"></i> Статистика</a>
+            <a href="#languages"><i class="fas fa-code"></i> Языки</a>
             <a href="#repositories"><i class="fas fa-code-branch"></i> Репозитории</a>
             <a href="#activity"><i class="fas fa-calendar-alt"></i> Активность</a>
             <a href="#about"><i class="fas fa-user"></i> Обо мне</a>
@@ -437,6 +561,62 @@
                 <div class="loading">
                     <div class="spinner"></div>
                     <p>Загрузка статистики...</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Графики по языкам программирования -->
+        <section id="languages" class="section languages-section">
+            <h2><i class="fas fa-language"></i> Языки программирования</h2>
+            <p>Распределение языков в моих репозиториях на GitHub</p>
+            
+            <div class="charts-container">
+                <div class="chart-wrapper">
+                    <h3 class="chart-title">Круговой график</h3>
+                    <div class="chart-container">
+                        <canvas id="languages-doughnut-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-wrapper">
+                    <h3 class="chart-title">Столбчатый график</h3>
+                    <div class="chart-container">
+                        <canvas id="languages-bar-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="language-details">
+                <h3><i class="fas fa-list"></i> Подробная статистика</h3>
+                <div id="languages-list" class="language-list">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Загрузка данных о языках...</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h4><i class="fas fa-table"></i> Таблица языков</h4>
+                    <table class="languages-table" id="languages-table">
+                        <thead>
+                            <tr>
+                                <th>Язык</th>
+                                <th>Количество репозиториев</th>
+                                <th>Процент</th>
+                                <th>Цвет</th>
+                            </tr>
+                        </thead>
+                        <tbody id="languages-table-body">
+                            <tr>
+                                <td colspan="4" style="text-align: center;">
+                                    <div class="loading">
+                                        <div class="spinner"></div>
+                                        <p>Загрузка таблицы...</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
@@ -490,13 +670,6 @@
                             <p>Загрузка календаря активности...</p>
                         </div>
                     </div>
-                </div>
-            </div>
-            
-            <div class="graph-container">
-                <h3><i class="fas fa-language"></i> Языки программирования</h3>
-                <div class="chart-container">
-                    <canvas id="languages-chart"></canvas>
                 </div>
             </div>
         </section>
@@ -570,7 +743,7 @@
         </section>
         
         <footer style="text-align: center; padding: 30px 0; margin-top: 50px; border-top: 1px solid var(--secondary-color);">
-            <p>© 2024 Блог /dev/null | GitHub активность обновляется в реальном времени</p>
+            <p>© 2024 Блог /dev/null | Статистика языков программирования</p>
             <p style="font-size: 0.9rem; opacity: 0.8;">
                 <i class="fas fa-sync-alt"></i> Данные обновляются каждые 5 минут | 
                 <i class="fas fa-code"></i> Пользователь: @lakladon
@@ -644,10 +817,12 @@
                 localStorage.setItem('theme', 'light');
                 icon.classList.remove('fa-moon');
                 icon.classList.add('fa-sun');
+                updateChartColors();
             } else {
                 localStorage.setItem('theme', 'dark');
                 icon.classList.remove('fa-sun');
                 icon.classList.add('fa-moon');
+                updateChartColors();
             }
         });
         
@@ -696,10 +871,10 @@
                         <p>${Math.floor((new Date() - new Date(userData.created_at)) / (1000 * 60 * 60 * 24 * 365))} лет</p>
                     </div>
                     <div class="stat-card">
-                        <i class="fas fa-map-marker-alt fa-2x"></i>
-                        <h3>Локация</h3>
-                        <div class="stat-number">RU</div>
-                        <p>${userData.location || 'Не указана'}</p>
+                        <i class="fas fa-star fa-2x"></i>
+                        <h3>Используемые языки</h3>
+                        <div class="stat-number" id="total-languages-count">-</div>
+                        <p>Разные языки</p>
                     </div>
                 `;
                 
@@ -731,6 +906,7 @@
                 repos.forEach(repo => {
                     if (!repo.fork) {
                         const updated = new Date(repo.updated_at).toLocaleDateString('ru-RU');
+                        const langColor = getLanguageColor(repo.language);
                         reposHTML += `
                             <div class="repo-card">
                                 <div class="repo-name">
@@ -742,7 +918,10 @@
                                 <div class="repo-stats">
                                     <span title="Звезды"><i class="fas fa-star"></i> ${repo.stargazers_count}</span>
                                     <span title="Форки"><i class="fas fa-code-branch"></i> ${repo.forks_count}</span>
-                                    <span title="Язык"><i class="fas fa-circle" style="color: ${getLanguageColor(repo.language)}"></i> ${repo.language || 'N/A'}</span>
+                                    <span title="Язык">
+                                        <i class="fas fa-circle" style="color: ${langColor}"></i> 
+                                        ${repo.language || 'N/A'}
+                                    </span>
                                 </div>
                                 <div style="margin-top: 10px; font-size: 0.8rem; opacity: 0.7;">
                                     Обновлен: ${updated}
@@ -768,102 +947,6 @@
                         <p>Не удалось загрузить репозитории: ${error.message}</p>
                     </div>
                 `;
-            }
-        }
-        
-        // Загрузка языков программирования
-        async function loadLanguages() {
-            try {
-                const repos = await fetchGitHubData(`${API_BASE_URL}/users/${GITHUB_USERNAME}/repos?per_page=100`);
-                const languages = {};
-                
-                // Собираем статистику по языкам
-                for (const repo of repos) {
-                    if (repo.language) {
-                        languages[repo.language] = (languages[repo.language] || 0) + 1;
-                    }
-                }
-                
-                // Сортируем по убыванию
-                const sortedLanguages = Object.entries(languages)
-                    .sort(([,a], [,b]) => b - a)
-                    .slice(0, 8);
-                
-                if (sortedLanguages.length > 0) {
-                    const ctx = document.getElementById('languages-chart').getContext('2d');
-                    
-                    // Удаляем старый график если он есть
-                    if (window.languagesChart) {
-                        window.languagesChart.destroy();
-                    }
-                    
-                    window.languagesChart = new Chart(ctx, {
-                        type: 'doughnut',
-                        data: {
-                            labels: sortedLanguages.map(([lang]) => lang),
-                            datasets: [{
-                                data: sortedLanguages.map(([,count]) => count),
-                                backgroundColor: sortedLanguages.map(([lang]) => getLanguageColor(lang)),
-                                borderWidth: 1,
-                                borderColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-color')
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    position: 'right',
-                                    labels: {
-                                        color: getComputedStyle(document.documentElement).getPropertyValue('--text-color'),
-                                        padding: 20,
-                                        font: {
-                                            family: "'JetBrains Mono', monospace"
-                                        }
-                                    }
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function(context) {
-                                            const label = context.label || '';
-                                            const value = context.raw || 0;
-                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                            const percentage = Math.round((value / total) * 100);
-                                            return `${label}: ${value} репозиториев (${percentage}%)`;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error('Error loading languages:', error);
-            }
-        }
-        
-        // Загрузка календаря активности
-        async function loadActivityCalendar() {
-            try {
-                const calendarContainer = document.getElementById('github-graph');
-                
-                // Используем GitHub Contributions SVG с адаптивными размерами
-                const width = Math.min(800, window.innerWidth - 40);
-                
-                calendarContainer.innerHTML = `
-                    <div style="text-align: center;">
-                        <img src="https://ghchart.rshah.org/${GITHUB_USERNAME}" 
-                             alt="GitHub Contributions Graph" 
-                             style="width: 100%; max-width: ${width}px; height: auto; border-radius: 5px;"
-                             onerror="this.onerror=null; this.src='https://ghchart.rshah.org/00ccff/${GITHUB_USERNAME}'">
-                        <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
-                            График активности за последний год
-                        </p>
-                    </div>
-                `;
-                
-            } catch (error) {
-                console.error('Error loading calendar:', error);
             }
         }
         
@@ -894,10 +977,303 @@
                 'Markdown': '#083fa1',
                 'Dockerfile': '#384d54',
                 'Makefile': '#427819',
-                'PowerShell': '#012456'
+                'PowerShell': '#012456',
+                'TeX': '#3D6117',
+                'Vim Script': '#199f4b',
+                'Assembly': '#6E4C13',
+                'Perl': '#0298c3',
+                'Lua': '#000080',
+                'Haskell': '#5e5086',
+                'Elixir': '#6e4a7e',
+                'Clojure': '#db5855',
+                'Groovy': '#e69f56',
+                'R': '#198CE7',
+                'MATLAB': '#e16737',
+                'Objective-C': '#438eff',
+                'Vue': '#41b883',
+                'Svelte': '#ff3e00',
+                'Julia': '#a270ba'
             };
             
             return colors[language] || `#${Math.floor(Math.random()*16777215).toString(16)}`;
+        }
+        
+        // Загрузка статистики языков
+        async function loadLanguagesStats() {
+            try {
+                const repos = await fetchGitHubData(`${API_BASE_URL}/users/${GITHUB_USERNAME}/repos?per_page=100`);
+                const languages = {};
+                
+                // Собираем статистику по языкам
+                for (const repo of repos) {
+                    if (repo.language) {
+                        languages[repo.language] = (languages[repo.language] || 0) + 1;
+                    }
+                }
+                
+                // Сортируем по убыванию
+                const sortedLanguages = Object.entries(languages)
+                    .sort(([,a], [,b]) => b - a);
+                
+                // Обновляем счетчик языков
+                const totalLanguagesElement = document.getElementById('total-languages-count');
+                if (totalLanguagesElement) {
+                    totalLanguagesElement.textContent = sortedLanguages.length;
+                }
+                
+                // Создаем данные для графиков (первые 10 языков)
+                const topLanguages = sortedLanguages.slice(0, 10);
+                const labels = topLanguages.map(([lang]) => lang);
+                const data = topLanguages.map(([,count]) => count);
+                const colors = topLanguages.map(([lang]) => getLanguageColor(lang));
+                
+                // Общее количество репозиториев
+                const totalRepos = data.reduce((sum, count) => sum + count, 0);
+                
+                // Создаем круговой график
+                createDoughnutChart(labels, data, colors, totalRepos);
+                
+                // Создаем столбчатый график
+                createBarChart(labels, data, colors);
+                
+                // Создаем список языков
+                createLanguagesList(sortedLanguages, totalRepos);
+                
+                // Создаем таблицу языков
+                createLanguagesTable(sortedLanguages, totalRepos);
+                
+            } catch (error) {
+                console.error('Error loading languages stats:', error);
+                document.getElementById('languages-list').innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Не удалось загрузить статистику языков: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Создание кругового графика
+        function createDoughnutChart(labels, data, colors, totalRepos) {
+            const ctx = document.getElementById('languages-doughnut-chart').getContext('2d');
+            
+            // Удаляем старый график если он есть
+            if (window.doughnutChart) {
+                window.doughnutChart.destroy();
+            }
+            
+            window.doughnutChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        borderWidth: 2,
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-color')
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--text-color'),
+                                padding: 15,
+                                font: {
+                                    family: "'JetBrains Mono', monospace",
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const percentage = ((value / totalRepos) * 100).toFixed(1);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Создание столбчатого графика
+        function createBarChart(labels, data, colors) {
+            const ctx = document.getElementById('languages-bar-chart').getContext('2d');
+            
+            // Удаляем старый график если он есть
+            if (window.barChart) {
+                window.barChart.destroy();
+            }
+            
+            window.barChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        borderColor: colors.map(color => color.replace('0.8', '1')),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label || ''}: ${context.raw} репозиториев`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 204, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--text-color'),
+                                font: {
+                                    family: "'JetBrains Mono', monospace"
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--text-color'),
+                                font: {
+                                    family: "'JetBrains Mono', monospace",
+                                    size: 11
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Создание списка языков
+        function createLanguagesList(languages, totalRepos) {
+            const container = document.getElementById('languages-list');
+            let html = '';
+            
+            languages.forEach(([language, count], index) => {
+                if (index < 15) { // Показываем только первые 15 языков
+                    const percentage = ((count / totalRepos) * 100).toFixed(1);
+                    const color = getLanguageColor(language);
+                    
+                    html += `
+                        <div class="language-item">
+                            <div class="language-color" style="background-color: ${color};"></div>
+                            <span class="language-name">${language}</span>
+                            <span class="language-count">${count}</span>
+                            <span class="language-percentage">(${percentage}%)</span>
+                        </div>
+                    `;
+                }
+            });
+            
+            if (languages.length > 15) {
+                html += `
+                    <div class="language-item">
+                        <div class="language-color" style="background-color: #cccccc;"></div>
+                        <span class="language-name">...</span>
+                        <span class="language-count">+${languages.length - 15}</span>
+                        <span class="language-percentage">еще</span>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        // Создание таблицы языков
+        function createLanguagesTable(languages, totalRepos) {
+            const tbody = document.getElementById('languages-table-body');
+            let html = '';
+            
+            languages.forEach(([language, count]) => {
+                const percentage = ((count / totalRepos) * 100).toFixed(2);
+                const color = getLanguageColor(language);
+                
+                html += `
+                    <tr>
+                        <td>
+                            <div class="table-language-cell">
+                                <div style="width: 12px; height: 12px; border-radius: 50%; background-color: ${color};"></div>
+                                ${language}
+                            </div>
+                        </td>
+                        <td>${count}</td>
+                        <td>${percentage}%</td>
+                        <td>
+                            <div style="width: 50px; height: 20px; background-color: ${color}; border-radius: 3px; border: 1px solid #666;"></div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+        }
+        
+        // Обновление цветов графиков при смене темы
+        function updateChartColors() {
+            const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
+            const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color');
+            
+            if (window.doughnutChart) {
+                window.doughnutChart.options.plugins.legend.labels.color = textColor;
+                window.doughnutChart.data.datasets[0].borderColor = bgColor;
+                window.doughnutChart.update();
+            }
+            
+            if (window.barChart) {
+                window.barChart.options.scales.y.ticks.color = textColor;
+                window.barChart.options.scales.x.ticks.color = textColor;
+                window.barChart.options.scales.y.grid.color = 'rgba(0, 204, 255, 0.1)';
+                window.barChart.update();
+            }
+        }
+        
+        // Загрузка календаря активности
+        async function loadActivityCalendar() {
+            try {
+                const calendarContainer = document.getElementById('github-graph');
+                
+                // Используем GitHub Contributions SVG с адаптивными размерами
+                const width = Math.min(800, window.innerWidth - 40);
+                
+                calendarContainer.innerHTML = `
+                    <div style="text-align: center;">
+                        <img src="https://ghchart.rshah.org/${GITHUB_USERNAME}" 
+                             alt="GitHub Contributions Graph" 
+                             style="width: 100%; max-width: ${width}px; height: auto; border-radius: 5px;"
+                             onerror="this.onerror=null; this.src='https://ghchart.rshah.org/00ccff/${GITHUB_USERNAME}'">
+                        <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
+                            График активности за последний год
+                        </p>
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('Error loading calendar:', error);
+            }
         }
         
         // Инициализация при загрузке
@@ -908,53 +1284,26 @@
             // Загружаем данные
             loadUserStats();
             loadRepositories();
-            loadLanguages();
+            loadLanguagesStats();
             loadActivityCalendar();
             
             // Автообновление каждые 5 минут
             setInterval(() => {
                 loadUserStats();
                 loadRepositories();
-                loadLanguages();
+                loadLanguagesStats();
                 loadActivityCalendar();
             }, 300000);
-            
-            // Обработчик изменения темы для обновления графиков
-            themeToggle.addEventListener('click', () => {
-                setTimeout(() => {
-                    if (window.languagesChart) {
-                        window.languagesChart.destroy();
-                        loadLanguages();
-                    }
-                }, 100);
-            });
         });
         
         // Обработка изменения размера окна
         window.addEventListener('resize', () => {
-            if (window.languagesChart) {
-                window.languagesChart.resize();
+            if (window.doughnutChart) {
+                window.doughnutChart.resize();
             }
-        });
-        
-        // Обработка ошибок сети
-        window.addEventListener('offline', () => {
-            const containers = ['stats-container', 'repos-container', 'github-graph'];
-            containers.forEach(id => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.innerHTML = `
-                        <div class="error-message">
-                            <i class="fas fa-wifi-slash"></i>
-                            <p>Отсутствует подключение к интернету. Данные будут загружены при восстановлении связи.</p>
-                        </div>
-                    `;
-                }
-            });
-        });
-        
-        window.addEventListener('online', () => {
-            location.reload();
+            if (window.barChart) {
+                window.barChart.resize();
+            }
         });
     </script>
 </body>

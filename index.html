@@ -37,6 +37,7 @@
             font-family: 'JetBrains Mono', 'Courier New', monospace;
             line-height: 1.6;
             transition: all 0.3s ease;
+            overflow-x: hidden;
         }
 
         canvas {
@@ -54,6 +55,7 @@
             background-color: rgba(0, 26, 51, 0.7);
             backdrop-filter: blur(5px);
             min-height: 100vh;
+            box-sizing: border-box;
         }
 
         .light-theme .container {
@@ -110,6 +112,8 @@
             background: var(--card-bg);
             border-radius: 10px;
             border-left: 4px solid var(--primary-color);
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
         .github-stats {
@@ -179,6 +183,40 @@
             padding: 20px;
             background: rgba(0, 68, 136, 0.2);
             border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .calendar-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .calendar-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .calendar-wrapper::-webkit-scrollbar-track {
+            background: rgba(0, 102, 204, 0.1);
+            border-radius: 4px;
+        }
+
+        .calendar-wrapper::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        .github-calendar {
+            min-width: 800px;
+            width: 100%;
+        }
+
+        .calendar-image {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
         }
 
         .loading {
@@ -225,11 +263,6 @@
             font-family: inherit;
         }
 
-        .github-calendar {
-            width: 100%;
-            overflow-x: auto;
-        }
-
         .graph-container {
             background: var(--card-bg);
             padding: 20px;
@@ -237,9 +270,64 @@
             margin-top: 20px;
         }
 
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .calendar-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .calendar-legend {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        .mobile-calendar-note {
+            display: none;
+            background: rgba(0, 204, 255, 0.1);
+            border: 1px solid var(--primary-color);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
         @media (max-width: 768px) {
             .container {
-                padding: 10px;
+                padding: 15px;
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+            
+            .section {
+                padding: 15px;
+                margin-bottom: 30px;
+                width: 100%;
             }
             
             nav {
@@ -260,6 +348,59 @@
                 right: 10px;
                 padding: 8px 12px;
                 font-size: 0.9rem;
+            }
+            
+            .calendar-wrapper {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .github-calendar {
+                min-width: 700px;
+            }
+            
+            .mobile-calendar-note {
+                display: block;
+            }
+            
+            .calendar-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .chart-container {
+                height: 250px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .section {
+                padding: 12px;
+            }
+            
+            .github-calendar {
+                min-width: 600px;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+            
+            .github-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
             }
         }
 
@@ -314,22 +455,48 @@
         <!-- Календарь активности -->
         <section id="activity" class="section">
             <h2><i class="fas fa-calendar-alt"></i> Календарь активности</h2>
+            
+            <div class="calendar-info">
+                <h3 style="margin: 0;">Последний год активности</h3>
+                <div class="calendar-legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #ebedf0;"></div>
+                        <span>Меньше</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #9be9a8;"></div>
+                        <span>1-2</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #40c463;"></div>
+                        <span>3-4</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #30a14e;"></div>
+                        <span>5+</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mobile-calendar-note">
+                <i class="fas fa-arrows-alt-h"></i> Прокрутите вправо, чтобы увидеть весь календарь
+            </div>
+            
             <div class="calendar-container">
-                <div class="github-calendar" id="github-graph">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <p>Загрузка календаря активности...</p>
+                <div class="calendar-wrapper">
+                    <div id="github-graph" class="github-calendar">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p>Загрузка календаря активности...</p>
+                        </div>
                     </div>
                 </div>
             </div>
             
             <div class="graph-container">
                 <h3><i class="fas fa-language"></i> Языки программирования</h3>
-                <div id="languages-chart">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <p>Загрузка данных о языках...</p>
-                    </div>
+                <div class="chart-container">
+                    <canvas id="languages-chart"></canvas>
                 </div>
             </div>
         </section>
@@ -339,7 +506,7 @@
             <h2><i class="fas fa-user"></i> Обо мне</h2>
             <p>Привет! Я Максим, известный в сети как <strong>/dev/null</strong> и <strong>randomhero</strong>. Мой путь в IT начался в 10 лет с командной строки Windows, а теперь я использую Arch Linux и пишу код на Python, Bash, JavaScript и Java.</p>
             
-            <div class="tech-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
+            <div class="github-stats">
                 <div class="stat-card">
                     <i class="fab fa-linux fa-2x"></i>
                     <h3>Основная ОС</h3>
@@ -355,6 +522,11 @@
                     <h3>Специализация</h3>
                     <p>Linux & Backend</p>
                 </div>
+                <div class="stat-card">
+                    <i class="fas fa-rocket fa-2x"></i>
+                    <h3>Опыт</h3>
+                    <p>5+ лет</p>
+                </div>
             </div>
         </section>
         
@@ -365,19 +537,34 @@
                 <div class="stat-card">
                     <i class="fab fa-github fa-2x"></i>
                     <h3>GitHub</h3>
-                    <p>github.com/lakladon</p>
-                    <a href="https://github.com/lakladon" target="_blank" style="color: var(--primary-color);">Перейти</a>
+                    <p>@lakladon</p>
+                    <a href="https://github.com/lakladon" target="_blank" style="color: var(--primary-color); text-decoration: none;">
+                        <i class="fas fa-external-link-alt"></i> Перейти
+                    </a>
                 </div>
                 <div class="stat-card">
                     <i class="fab fa-telegram fa-2x"></i>
                     <h3>Telegram</h3>
                     <p>@LakLadon</p>
-                    <a href="https://t.me/LakLadon" target="_blank" style="color: var(--primary-color);">Написать</a>
+                    <a href="https://t.me/LakLadon" target="_blank" style="color: var(--primary-color); text-decoration: none;">
+                        <i class="fas fa-external-link-alt"></i> Написать
+                    </a>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-envelope fa-2x"></i>
                     <h3>Email</h3>
                     <p>randomhero@internet.ru</p>
+                    <a href="mailto:randomhero@internet.ru" style="color: var(--primary-color); text-decoration: none;">
+                        <i class="fas fa-paper-plane"></i> Написать
+                    </a>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-code fa-2x"></i>
+                    <h3>Проекты</h3>
+                    <p>Смотреть выше</p>
+                    <a href="#repositories" style="color: var(--primary-color); text-decoration: none;">
+                        <i class="fas fa-arrow-up"></i> К репозиториям
+                    </a>
                 </div>
             </div>
         </section>
@@ -385,7 +572,8 @@
         <footer style="text-align: center; padding: 30px 0; margin-top: 50px; border-top: 1px solid var(--secondary-color);">
             <p>© 2024 Блог /dev/null | GitHub активность обновляется в реальном времени</p>
             <p style="font-size: 0.9rem; opacity: 0.8;">
-                <i class="fas fa-sync-alt"></i> Данные обновляются каждые 5 минут
+                <i class="fas fa-sync-alt"></i> Данные обновляются каждые 5 минут | 
+                <i class="fas fa-code"></i> Пользователь: @lakladon
             </p>
         </footer>
     </div>
@@ -395,58 +583,58 @@
         // Конфигурация
         const GITHUB_USERNAME = 'lakladon';
         const API_BASE_URL = 'https://api.github.com';
-        const GITHUB_TOKEN = ''; // Необходимо добавить токен для большего лимита запросов
         
         // Matrix effect
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
         
-        canvas.height = window.innerHeight;
-        canvas.width = window.innerWidth;
-        
-        const chars = '01';
-        const fontSize = 20;
-        const columns = canvas.width / fontSize;
-        const drops = [];
-        
-        for (let x = 0; x < columns; x++) {
-            drops[x] = Math.random() * 100;
-        }
-        
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(0, 26, 51, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.fillStyle = '#00ccff';
-            ctx.font = fontSize + 'px monospace';
-            
-            for (let i = 0; i < drops.length; i++) {
-                const text = chars.charAt(Math.floor(Math.random() * chars.length));
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
-        
-        setInterval(drawMatrix, 33);
-        
-        window.addEventListener('resize', () => {
+        function initMatrix() {
             canvas.height = window.innerHeight;
             canvas.width = window.innerWidth;
-        });
+            
+            const chars = '01';
+            const fontSize = 14;
+            const columns = Math.floor(canvas.width / fontSize);
+            const drops = [];
+            
+            for (let x = 0; x < columns; x++) {
+                drops[x] = Math.random() * 100;
+            }
+            
+            function drawMatrix() {
+                ctx.fillStyle = 'rgba(0, 26, 51, 0.03)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#00ccff';
+                ctx.font = `${fontSize}px monospace`;
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            
+            setInterval(drawMatrix, 33);
+        }
+        
+        window.addEventListener('resize', initMatrix);
         
         // Theme toggle
         const themeToggle = document.getElementById('theme-toggle');
         const icon = themeToggle.querySelector('i');
         
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        if (currentTheme === 'light') {
-            document.body.classList.add('light-theme');
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
+        function initTheme() {
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+            if (currentTheme === 'light') {
+                document.body.classList.add('light-theme');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
         }
         
         themeToggle.addEventListener('click', () => {
@@ -466,15 +654,11 @@
         // GitHub API функции
         async function fetchGitHubData(url) {
             try {
-                const headers = {
-                    'Accept': 'application/vnd.github.v3+json'
-                };
-                
-                if (GITHUB_TOKEN) {
-                    headers['Authorization'] = `token ${GITHUB_TOKEN}`;
-                }
-                
-                const response = await fetch(url, { headers });
+                const response = await fetch(url, {
+                    headers: {
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -497,7 +681,7 @@
                         <i class="fas fa-code-branch fa-2x"></i>
                         <h3>Репозитории</h3>
                         <div class="stat-number">${userData.public_repos}</div>
-                        <p>${userData.public_gists} gists</p>
+                        <p>Публичные</p>
                     </div>
                     <div class="stat-card">
                         <i class="fas fa-users fa-2x"></i>
@@ -506,16 +690,16 @@
                         <p>Подписок: ${userData.following}</p>
                     </div>
                     <div class="stat-card">
-                        <i class="fas fa-star fa-2x"></i>
-                        <h3>Звезды</h3>
-                        <div class="stat-number">${Math.floor(userData.followers * 2.5)}</div>
-                        <p>Приблизительно</p>
-                    </div>
-                    <div class="stat-card">
                         <i class="fas fa-calendar-day fa-2x"></i>
                         <h3>На GitHub с</h3>
                         <div class="stat-number">${new Date(userData.created_at).getFullYear()}</div>
                         <p>${Math.floor((new Date() - new Date(userData.created_at)) / (1000 * 60 * 60 * 24 * 365))} лет</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-map-marker-alt fa-2x"></i>
+                        <h3>Локация</h3>
+                        <div class="stat-number">RU</div>
+                        <p>${userData.location || 'Не указана'}</p>
                     </div>
                 `;
                 
@@ -523,7 +707,7 @@
                 document.getElementById('stats-container').innerHTML = `
                     <div class="error-message">
                         <i class="fas fa-exclamation-triangle"></i>
-                        <p>Не удалось загрузить статистику. Пожалуйста, проверьте подключение к интернету.</p>
+                        <p>Не удалось загрузить статистику. ${error.message}</p>
                     </div>
                 `;
             }
@@ -532,7 +716,7 @@
         // Загрузка репозиториев
         async function loadRepositories() {
             try {
-                const repos = await fetchGitHubData(`${API_BASE_URL}/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100`);
+                const repos = await fetchGitHubData(`${API_BASE_URL}/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=30`);
                 
                 if (repos.length === 0) {
                     document.getElementById('repos-container').innerHTML = `
@@ -546,6 +730,7 @@
                 let reposHTML = '';
                 repos.forEach(repo => {
                     if (!repo.fork) {
+                        const updated = new Date(repo.updated_at).toLocaleDateString('ru-RU');
                         reposHTML += `
                             <div class="repo-card">
                                 <div class="repo-name">
@@ -555,12 +740,15 @@
                                     ${repo.description || 'Описание отсутствует'}
                                 </div>
                                 <div class="repo-stats">
-                                    <span><i class="fas fa-star"></i> ${repo.stargazers_count}</span>
-                                    <span><i class="fas fa-code-branch"></i> ${repo.forks_count}</span>
-                                    <span><i class="fas fa-circle" style="color: ${repo.language ? getLanguageColor(repo.language) : '#ccc'}"></i> ${repo.language || 'N/A'}</span>
+                                    <span title="Звезды"><i class="fas fa-star"></i> ${repo.stargazers_count}</span>
+                                    <span title="Форки"><i class="fas fa-code-branch"></i> ${repo.forks_count}</span>
+                                    <span title="Язык"><i class="fas fa-circle" style="color: ${getLanguageColor(repo.language)}"></i> ${repo.language || 'N/A'}</span>
                                 </div>
-                                <a href="${repo.html_url}" target="_blank" style="display: inline-block; margin-top: 10px; color: var(--primary-color);">
-                                    <i class="fas fa-external-link-alt"></i> Открыть
+                                <div style="margin-top: 10px; font-size: 0.8rem; opacity: 0.7;">
+                                    Обновлен: ${updated}
+                                </div>
+                                <a href="${repo.html_url}" target="_blank" style="display: inline-block; margin-top: 10px; color: var(--primary-color); text-decoration: none;">
+                                    <i class="fas fa-external-link-alt"></i> Открыть на GitHub
                                 </a>
                             </div>
                         `;
@@ -577,7 +765,7 @@
                 document.getElementById('repos-container').innerHTML = `
                     <div class="error-message">
                         <i class="fas fa-exclamation-triangle"></i>
-                        <p>Не удалось загрузить репозитории. Попробуйте обновить страницу.</p>
+                        <p>Не удалось загрузить репозитории: ${error.message}</p>
                     </div>
                 `;
             }
@@ -589,38 +777,60 @@
                 const repos = await fetchGitHubData(`${API_BASE_URL}/users/${GITHUB_USERNAME}/repos?per_page=100`);
                 const languages = {};
                 
+                // Собираем статистику по языкам
                 for (const repo of repos) {
                     if (repo.language) {
                         languages[repo.language] = (languages[repo.language] || 0) + 1;
                     }
                 }
                 
+                // Сортируем по убыванию
                 const sortedLanguages = Object.entries(languages)
                     .sort(([,a], [,b]) => b - a)
                     .slice(0, 8);
                 
                 if (sortedLanguages.length > 0) {
-                    const ctx = document.createElement('canvas');
-                    document.getElementById('languages-chart').innerHTML = '';
-                    document.getElementById('languages-chart').appendChild(ctx);
+                    const ctx = document.getElementById('languages-chart').getContext('2d');
                     
-                    new Chart(ctx, {
+                    // Удаляем старый график если он есть
+                    if (window.languagesChart) {
+                        window.languagesChart.destroy();
+                    }
+                    
+                    window.languagesChart = new Chart(ctx, {
                         type: 'doughnut',
                         data: {
                             labels: sortedLanguages.map(([lang]) => lang),
                             datasets: [{
                                 data: sortedLanguages.map(([,count]) => count),
                                 backgroundColor: sortedLanguages.map(([lang]) => getLanguageColor(lang)),
-                                borderWidth: 1
+                                borderWidth: 1,
+                                borderColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-color')
                             }]
                         },
                         options: {
                             responsive: true,
+                            maintainAspectRatio: false,
                             plugins: {
                                 legend: {
                                     position: 'right',
                                     labels: {
-                                        color: getComputedStyle(document.documentElement).getPropertyValue('--text-color')
+                                        color: getComputedStyle(document.documentElement).getPropertyValue('--text-color'),
+                                        padding: 20,
+                                        font: {
+                                            family: "'JetBrains Mono', monospace"
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const label = context.label || '';
+                                            const value = context.raw || 0;
+                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                            const percentage = Math.round((value / total) * 100);
+                                            return `${label}: ${value} репозиториев (${percentage}%)`;
+                                        }
                                     }
                                 }
                             }
@@ -632,8 +842,35 @@
             }
         }
         
+        // Загрузка календаря активности
+        async function loadActivityCalendar() {
+            try {
+                const calendarContainer = document.getElementById('github-graph');
+                
+                // Используем GitHub Contributions SVG с адаптивными размерами
+                const width = Math.min(800, window.innerWidth - 40);
+                
+                calendarContainer.innerHTML = `
+                    <div style="text-align: center;">
+                        <img src="https://ghchart.rshah.org/${GITHUB_USERNAME}" 
+                             alt="GitHub Contributions Graph" 
+                             style="width: 100%; max-width: ${width}px; height: auto; border-radius: 5px;"
+                             onerror="this.onerror=null; this.src='https://ghchart.rshah.org/00ccff/${GITHUB_USERNAME}'">
+                        <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
+                            График активности за последний год
+                        </p>
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('Error loading calendar:', error);
+            }
+        }
+        
         // Получение цвета для языка программирования
         function getLanguageColor(language) {
+            if (!language) return '#cccccc';
+            
             const colors = {
                 'Python': '#3572A5',
                 'JavaScript': '#f1e05a',
@@ -653,27 +890,22 @@
                 'Swift': '#ffac45',
                 'Kotlin': '#F18E33',
                 'Dart': '#00B4AB',
-                'Scala': '#c22d40'
+                'Scala': '#c22d40',
+                'Markdown': '#083fa1',
+                'Dockerfile': '#384d54',
+                'Makefile': '#427819',
+                'PowerShell': '#012456'
             };
             
-            return colors[language] || '#cccccc';
+            return colors[language] || `#${Math.floor(Math.random()*16777215).toString(16)}`;
         }
         
-        // Загрузка календаря активности
-        function loadActivityCalendar() {
-            const calendarContainer = document.getElementById('github-graph');
-            
-            // Используем GitHub Contributions SVG
-            calendarContainer.innerHTML = `
-                <img src="https://ghchart.rshah.org/${GITHUB_USERNAME}" 
-                     alt="GitHub Contributions Graph" 
-                     style="width: 100%; height: auto;"
-                     onerror="this.onerror=null; this.src='https://ghchart.rshah.org/00ccff/${GITHUB_USERNAME}'">
-            `;
-        }
-        
-        // Инициализация
+        // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', () => {
+            initMatrix();
+            initTheme();
+            
+            // Загружаем данные
             loadUserStats();
             loadRepositories();
             loadLanguages();
@@ -683,27 +915,46 @@
             setInterval(() => {
                 loadUserStats();
                 loadRepositories();
+                loadLanguages();
+                loadActivityCalendar();
             }, 300000);
+            
+            // Обработчик изменения темы для обновления графиков
+            themeToggle.addEventListener('click', () => {
+                setTimeout(() => {
+                    if (window.languagesChart) {
+                        window.languagesChart.destroy();
+                        loadLanguages();
+                    }
+                }, 100);
+            });
+        });
+        
+        // Обработка изменения размера окна
+        window.addEventListener('resize', () => {
+            if (window.languagesChart) {
+                window.languagesChart.resize();
+            }
         });
         
         // Обработка ошибок сети
-        window.addEventListener('online', () => {
-            location.reload();
-        });
-        
         window.addEventListener('offline', () => {
-            const containers = ['stats-container', 'repos-container'];
-            containers.forEach(container => {
-                const element = document.getElementById(container);
+            const containers = ['stats-container', 'repos-container', 'github-graph'];
+            containers.forEach(id => {
+                const element = document.getElementById(id);
                 if (element) {
                     element.innerHTML = `
                         <div class="error-message">
                             <i class="fas fa-wifi-slash"></i>
-                            <p>Отсутствует подключение к интернету</p>
+                            <p>Отсутствует подключение к интернету. Данные будут загружены при восстановлении связи.</p>
                         </div>
                     `;
                 }
             });
+        });
+        
+        window.addEventListener('online', () => {
+            location.reload();
         });
     </script>
 </body>

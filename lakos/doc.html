@@ -135,54 +135,69 @@
             margin-bottom: 40px;
         }
         
+        /* Стили для блоков кода как в примере */
         .code-block {
-            background-color: #000000;
-            border: 1px solid #ffffff;
+            background-color: #1e1e1e;
+            border: 1px solid #333;
             padding: 20px;
             margin: 20px 0;
             overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            border-radius: 3px;
-            white-space: pre-wrap;
+            border-radius: 5px;
             position: relative;
+        }
+        
+        .code-block.no-language {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid #ffffff;
+        }
+        
+        .code-block.no-language code {
+            display: block;
+            white-space: pre-wrap;
+            background: transparent;
+            color: #ffffff;
         }
         
         .code-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid #ffffff;
-            padding: 8px 15px;
-            margin: -20px -20px 15px -20px;
-            border-radius: 3px 3px 0 0;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .code-block.no-language .code-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .code-language {
-            font-size: 0.8em;
-            opacity: 0.7;
+            font-size: 0.9em;
+            color: #cccccc;
         }
         
-        .copy-button {
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid #ffffff;
+        .copy-btn {
+            background-color: #333;
             color: #ffffff;
-            padding: 4px 10px;
-            font-size: 0.8em;
+            border: none;
+            padding: 5px 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
             cursor: pointer;
             border-radius: 3px;
-            transition: all 0.2s;
-            font-family: 'Courier New', monospace;
+            transition: all 0.3s;
         }
         
-        .copy-button:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+        .copy-btn:hover {
+            background-color: #555;
         }
         
-        .copy-button.copied {
-            background-color: rgba(0, 255, 0, 0.2);
-            border-color: #00ff00;
+        .copy-btn.copied {
+            background-color: #4CAF50;
+        }
+        
+        .copy-btn.error {
+            background-color: #f44336;
         }
         
         .file-structure {
@@ -276,25 +291,30 @@
             line-height: 1.7;
         }
         
-        .markdown-content pre {
-            background-color: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 3px;
+        .markdown-content pre.plain-code {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 5px;
             overflow-x: auto;
             margin: 15px 0;
-            position: relative;
+            border: 1px solid #333;
         }
         
-        .markdown-content pre code {
+        .markdown-content pre.plain-code code {
             display: block;
             padding: 0;
             background: transparent;
+            white-space: pre-wrap;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
         }
         
-        .markdown-content code {
+        .markdown-content code:not(pre code) {
             background-color: rgba(255, 255, 255, 0.1);
             padding: 2px 5px;
             border-radius: 3px;
+            color: #ffffff;
         }
         
         .doc-link {
@@ -314,6 +334,45 @@
         
         .external-link:hover {
             color: #00ffff;
+        }
+        
+        /* Стили для подсветки синтаксиса */
+        pre code.hljs {
+            background: transparent !important;
+            padding: 0 !important;
+        }
+        
+        .hljs {
+            color: #f8f8f2 !important;
+        }
+        
+        .hljs-keyword,
+        .hljs-selector-tag,
+        .hljs-literal {
+            color: #ff79c6 !important;
+        }
+        
+        .hljs-string,
+        .hljs-doctag {
+            color: #f1fa8c !important;
+        }
+        
+        .hljs-title,
+        .hljs-section,
+        .hljs-type {
+            color: #8be9fd !important;
+        }
+        
+        .hljs-comment {
+            color: #6272a4 !important;
+        }
+        
+        .hljs-number {
+            color: #bd93f9 !important;
+        }
+        
+        .hljs-built_in {
+            color: #50fa7b !important;
         }
         
         /* Адаптивность */
@@ -374,13 +433,16 @@
             
             .code-block {
                 padding: 15px;
-                font-size: 0.9em;
             }
             
             .code-header {
                 flex-direction: column;
                 gap: 8px;
                 align-items: flex-start;
+            }
+            
+            .copy-btn {
+                align-self: flex-end;
             }
         }
         
@@ -413,6 +475,7 @@
             animation: fadeIn 0.3s ease-in;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai.min.css">
 </head>
 <body>
     <!-- Боковая панель навигации -->
@@ -477,6 +540,13 @@
         </div>
     </main>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/makefile.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/assembly.min.js"></script>
     <script>
         // Конфигурация
         const REPO_OWNER = 'lakladon';
@@ -488,6 +558,52 @@
         // DOM элементы
         const contentContainer = document.getElementById('content-container');
         const navLinks = document.querySelectorAll('.nav-links a');
+        
+        // Список поддерживаемых языков программирования
+        const PROGRAMMING_LANGUAGES = [
+            'c', 'cpp', 'c++', 'c#', 'java', 'python', 'py',
+            'javascript', 'js', 'typescript', 'ts',
+            'go', 'golang', 'rust', 'rs', 'ruby', 'rb',
+            'php', 'swift', 'kotlin', 'scala',
+            'bash', 'sh', 'shell', 'powershell', 'ps1',
+            'sql', 'html', 'css', 'scss', 'sass', 'less',
+            'yaml', 'yml', 'json', 'xml', 'toml',
+            'makefile', 'dockerfile', 'cmake',
+            'assembly', 'asm', 'nasm'
+        ];
+        
+        // Карта для highlight.js
+        const HIGHLIGHT_LANG_MAP = {
+            'c': 'c',
+            'cpp': 'cpp',
+            'c++': 'cpp',
+            'python': 'python',
+            'py': 'python',
+            'javascript': 'javascript',
+            'js': 'javascript',
+            'typescript': 'typescript',
+            'ts': 'typescript',
+            'bash': 'bash',
+            'sh': 'bash',
+            'shell': 'bash',
+            'makefile': 'makefile',
+            'assembly': 'assembly',
+            'asm': 'assembly',
+            'nasm': 'assembly',
+            'dockerfile': 'dockerfile',
+            'cmake': 'cmake',
+            'yaml': 'yaml',
+            'yml': 'yaml',
+            'json': 'json',
+            'xml': 'xml',
+            'sql': 'sql',
+            'html': 'xml',
+            'css': 'css',
+            'rust': 'rust',
+            'go': 'go',
+            'java': 'java',
+            'php': 'php'
+        };
         
         // Функция для загрузки документации
         async function loadDocumentation(filePath) {
@@ -521,8 +637,8 @@
                     </div>
                 `;
                 
-                // Добавляем кнопки копирования для блоков кода
-                addCopyButtons();
+                // Применяем подсветку синтаксиса
+                applySyntaxHighlighting();
                 
                 // Обрабатываем внутренние ссылки
                 processInternalLinks();
@@ -551,6 +667,9 @@
             // Обрабатываем ссылки на другие документы
             markdown = processDocLinks(markdown, currentFilePath);
             
+            // Обрабатываем блоки кода отдельно
+            markdown = processCodeBlocks(markdown);
+            
             return markdown
                 // Заголовки
                 .replace(/^# (.*$)/gm, '<h1 id="$1">$1</h1>')
@@ -563,21 +682,6 @@
                 
                 // Курсив
                 .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                
-                // Блоки кода с обработкой
-                .replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
-                    const language = lang || detectLanguage(code);
-                    const codeId = 'code-' + Math.random().toString(36).substr(2, 9);
-                    return `
-                        <div class="code-block" id="${codeId}">
-                            <div class="code-header">
-                                <span class="code-language">${language}</span>
-                                <button class="copy-button" onclick="copyCode('${codeId}')">Копировать</button>
-                            </div>
-                            <code>${escapeHtml(code)}</code>
-                        </div>
-                    `;
-                })
                 
                 // Inline код
                 .replace(/`([^`]+)`/g, '<code>$1</code>')
@@ -627,6 +731,123 @@
                 });
         }
         
+        // Обработка блоков кода
+        function processCodeBlocks(markdown) {
+            // Регулярное выражение для поиска блоков кода с языком или без
+            const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
+            
+            return markdown.replace(codeBlockRegex, (match, lang, code) => {
+                const trimmedLang = lang ? lang.trim().toLowerCase() : '';
+                const codeId = 'code-' + Math.random().toString(36).substr(2, 9);
+                
+                // Проверяем, является ли указанный язык программированием
+                const isProgrammingLanguage = isValidProgrammingLanguage(trimmedLang);
+                
+                // Если язык указан и это ЯП - создаем блок с заголовком и кнопкой
+                if (trimmedLang && isProgrammingLanguage) {
+                    const displayLang = getDisplayLanguage(trimmedLang);
+                    const highlightLang = HIGHLIGHT_LANG_MAP[trimmedLang] || trimmedLang;
+                    
+                    return `
+                        <div class="code-block" id="${codeId}">
+                            <div class="code-header">
+                                <span class="code-language">${displayLang}</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                            </div>
+                            <pre><code class="language-${highlightLang}">${escapeHtml(code)}</code></pre>
+                        </div>
+                    `;
+                } 
+                // Если язык не указан или это не ЯП - создаем простой блок
+                else {
+                    return `<pre class="plain-code"><code>${escapeHtml(code)}</code></pre>`;
+                }
+            });
+        }
+        
+        // Проверка, является ли строка языком программирования
+        function isValidProgrammingLanguage(lang) {
+            if (!lang) return false;
+            return PROGRAMMING_LANGUAGES.includes(lang.toLowerCase());
+        }
+        
+        // Получение отображаемого названия языка
+        function getDisplayLanguage(lang) {
+            const langMap = {
+                'c': 'C',
+                'cpp': 'C++',
+                'c++': 'C++',
+                'c#': 'C#',
+                'java': 'Java',
+                'python': 'Python',
+                'py': 'Python',
+                'javascript': 'JavaScript',
+                'js': 'JavaScript',
+                'typescript': 'TypeScript',
+                'ts': 'TypeScript',
+                'go': 'Go',
+                'golang': 'Go',
+                'rust': 'Rust',
+                'rs': 'Rust',
+                'ruby': 'Ruby',
+                'rb': 'Ruby',
+                'php': 'PHP',
+                'swift': 'Swift',
+                'kotlin': 'Kotlin',
+                'scala': 'Scala',
+                'bash': 'Bash',
+                'sh': 'Shell',
+                'shell': 'Shell',
+                'powershell': 'PowerShell',
+                'ps1': 'PowerShell',
+                'sql': 'SQL',
+                'html': 'HTML',
+                'css': 'CSS',
+                'scss': 'SCSS',
+                'sass': 'SASS',
+                'less': 'LESS',
+                'yaml': 'YAML',
+                'yml': 'YAML',
+                'json': 'JSON',
+                'xml': 'XML',
+                'toml': 'TOML',
+                'makefile': 'Makefile',
+                'dockerfile': 'Dockerfile',
+                'cmake': 'CMake',
+                'assembly': 'Assembly',
+                'asm': 'Assembly',
+                'nasm': 'NASM'
+            };
+            
+            return langMap[lang.toLowerCase()] || lang;
+        }
+        
+        // Применение подсветки синтаксиса
+        function applySyntaxHighlighting() {
+            document.querySelectorAll('pre code').forEach((block) => {
+                // Удаляем предыдущие классы highlight.js
+                block.classList.remove('hljs');
+                
+                // Определяем язык из класса
+                const langClass = Array.from(block.classList).find(cls => cls.startsWith('language-'));
+                if (langClass) {
+                    const lang = langClass.replace('language-', '');
+                    try {
+                        hljs.highlightElement(block);
+                    } catch (e) {
+                        console.log('Could not highlight language:', lang);
+                    }
+                }
+            });
+        }
+        
+        // Функция для экранирования HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
         // Обработка ссылок на другие документы
         function processDocLinks(markdown, currentFilePath) {
             // Регулярное выражение для поиска ссылок на MD файлы
@@ -673,49 +894,6 @@
             });
         }
         
-        // Функция для экранирования HTML
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-        
-        // Определение языка кода
-        function detectLanguage(code) {
-            const lowerCode = code.toLowerCase();
-            if (lowerCode.includes('#include') || lowerCode.includes('int main') || lowerCode.includes('void')) return 'c';
-            if (lowerCode.includes('mov ') || lowerCode.includes('db ') || lowerCode.includes('asm')) return 'assembly';
-            if (lowerCode.includes('make ') || lowerCode.includes('gcc ') || lowerCode.includes('./configure')) return 'bash';
-            if (lowerCode.includes('git ') || lowerCode.includes('clone ') || lowerCode.includes('push')) return 'git';
-            if (lowerCode.includes('cmake') || lowerCode.includes('add_executable')) return 'cmake';
-            if (lowerCode.includes('python') || lowerCode.includes('def ') || lowerCode.includes('import ')) return 'python';
-            if (lowerCode.includes('{') && lowerCode.includes('}') && lowerCode.includes('function')) return 'javascript';
-            return 'text';
-        }
-        
-        // Добавление кнопок копирования
-        function addCopyButtons() {
-            // Также добавляем кнопки копирования для простых блоков pre>code
-            document.querySelectorAll('pre').forEach(pre => {
-                if (!pre.querySelector('.copy-button')) {
-                    const codeId = 'code-' + Math.random().toString(36).substr(2, 9);
-                    pre.id = codeId;
-                    
-                    const codeContent = pre.textContent;
-                    const language = detectLanguage(codeContent);
-                    
-                    const header = document.createElement('div');
-                    header.className = 'code-header';
-                    header.innerHTML = `
-                        <span class="code-language">${language}</span>
-                        <button class="copy-button" onclick="copyCode('${codeId}')">Копировать</button>
-                    `;
-                    
-                    pre.insertBefore(header, pre.firstChild);
-                }
-            });
-        }
-        
         // Обработка внутренних ссылок
         function processInternalLinks() {
             document.querySelectorAll('.doc-link').forEach(link => {
@@ -756,46 +934,30 @@
             });
         }
         
-        // Функция копирования кода
-        window.copyCode = function(codeBlockId) {
-            const codeBlock = document.getElementById(codeBlockId);
-            if (!codeBlock) return;
+        // Функция копирования кода (как в примере)
+        window.copyCode = function(button) {
+            const codeBlock = button.closest('.code-block');
+            const codeElement = codeBlock.querySelector('code');
+            const text = codeElement.textContent;
             
-            const codeElement = codeBlock.querySelector('code') || codeBlock;
-            const codeText = codeElement.textContent;
-            
-            // Используем Clipboard API
-            navigator.clipboard.writeText(codeText).then(() => {
-                const button = codeBlock.querySelector('.copy-button');
-                if (button) {
-                    const originalText = button.textContent;
-                    button.textContent = 'Скопировано!';
-                    button.classList.add('copied');
-                    
-                    setTimeout(() => {
-                        button.textContent = originalText;
-                        button.classList.remove('copied');
-                    }, 2000);
-                }
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Скопировано!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
             }).catch(err => {
                 console.error('Ошибка при копировании:', err);
-                // Fallback для старых браузеров
-                const textArea = document.createElement('textarea');
-                textArea.value = codeText;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
+                button.textContent = 'Ошибка!';
+                button.classList.add('error');
                 
-                const button = codeBlock.querySelector('.copy-button');
-                if (button) {
-                    button.textContent = 'Скопировано!';
-                    button.classList.add('copied');
-                    setTimeout(() => {
-                        button.textContent = 'Копировать';
-                        button.classList.remove('copied');
-                    }, 2000);
-                }
+                setTimeout(() => {
+                    button.textContent = 'Копировать';
+                    button.classList.remove('error');
+                }, 2000);
             });
         };
         

@@ -145,6 +145,44 @@
             font-size: 1em;
             border-radius: 3px;
             white-space: pre-wrap;
+            position: relative;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid #ffffff;
+            padding: 8px 15px;
+            margin: -20px -20px 15px -20px;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .code-language {
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+        
+        .copy-button {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid #ffffff;
+            color: #ffffff;
+            padding: 4px 10px;
+            font-size: 0.8em;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.2s;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .copy-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .copy-button.copied {
+            background-color: rgba(0, 255, 0, 0.2);
+            border-color: #00ff00;
         }
         
         .file-structure {
@@ -244,12 +282,38 @@
             border-radius: 3px;
             overflow-x: auto;
             margin: 15px 0;
+            position: relative;
+        }
+        
+        .markdown-content pre code {
+            display: block;
+            padding: 0;
+            background: transparent;
         }
         
         .markdown-content code {
             background-color: rgba(255, 255, 255, 0.1);
             padding: 2px 5px;
             border-radius: 3px;
+        }
+        
+        .doc-link {
+            color: #00aaff;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        
+        .doc-link:hover {
+            color: #00ffff;
+        }
+        
+        .external-link {
+            color: #00ffaa;
+            text-decoration: underline;
+        }
+        
+        .external-link:hover {
+            color: #00ffff;
         }
         
         /* Адаптивность */
@@ -312,6 +376,12 @@
                 padding: 15px;
                 font-size: 0.9em;
             }
+            
+            .code-header {
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
+            }
         }
         
         /* Скроллбар */
@@ -331,6 +401,16 @@
         
         ::-webkit-scrollbar-thumb:hover {
             background: #cccccc;
+        }
+        
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
         }
     </style>
 </head>
@@ -402,7 +482,8 @@
         const REPO_OWNER = 'lakladon';
         const REPO_NAME = 'lakos';
         const DOCS_PATH = 'docs';
-        const GITHUB_API = 'https://api.github.com/repos';
+        const BASE_URL = 'https://lakladon.github.io/lakos';
+        const GITHUB_RAW = 'https://raw.githubusercontent.com';
         
         // DOM элементы
         const contentContainer = document.getElementById('content-container');
@@ -415,7 +496,7 @@
                 contentContainer.innerHTML = '<div class="loading">Загрузка документации...</div>';
                 
                 // Формируем URL для raw-файла на GitHub
-                const rawUrl = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${DOCS_PATH}/${filePath}`;
+                const rawUrl = `${GITHUB_RAW}/${REPO_OWNER}/${REPO_NAME}/main/${DOCS_PATH}/${filePath}`;
                 
                 // Загружаем файл
                 const response = await fetch(rawUrl);
@@ -426,32 +507,36 @@
                 
                 const markdownContent = await response.text();
                 
-                // Преобразуем markdown в HTML
-                const htmlContent = markdownToHtml(markdownContent);
+                // Преобразуем markdown в HTML с улучшениями
+                const htmlContent = enhancedMarkdownToHtml(markdownContent, filePath);
                 
                 // Отображаем содержимое
                 contentContainer.innerHTML = `
                     <div class="page-header">
-                        <h1>${filePath.split('/').pop()}</h1>
+                        <h1>${filePath.split('/').pop().replace('.md', '')}</h1>
                         <p>Документация LakOS</p>
                     </div>
-                    <div class="markdown-content">
+                    <div class="markdown-content fade-in">
                         ${htmlContent}
                     </div>
                 `;
                 
+                // Добавляем кнопки копирования для блоков кода
+                addCopyButtons();
+                
+                // Обрабатываем внутренние ссылки
+                processInternalLinks();
+                
                 // Обновляем активную ссылку в навигации
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('data-doc') === filePath) {
-                        link.classList.add('active');
-                    }
-                });
+                updateActiveNavLink(filePath);
+                
+                // Прокручиваем к началу
+                window.scrollTo({ top: 0, behavior: 'smooth' });
                 
             } catch (error) {
                 console.error('Ошибка загрузки документации:', error);
                 contentContainer.innerHTML = `
-                    <div class="error">
+                    <div class="error fade-in">
                         <h2>Ошибка загрузки документации</h2>
                         <p>Не удалось загрузить файл: ${filePath}</p>
                         <p>${error.message}</p>
@@ -461,14 +546,17 @@
             }
         }
         
-        // Простая функция преобразования Markdown в HTML
-        function markdownToHtml(markdown) {
+        // Улучшенная функция преобразования Markdown в HTML
+        function enhancedMarkdownToHtml(markdown, currentFilePath) {
+            // Обрабатываем ссылки на другие документы
+            markdown = processDocLinks(markdown, currentFilePath);
+            
             return markdown
                 // Заголовки
-                .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-                .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-                .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-                .replace(/^#### (.*$)/gm, '<h4>$1</h4>')
+                .replace(/^# (.*$)/gm, '<h1 id="$1">$1</h1>')
+                .replace(/^## (.*$)/gm, '<h2 id="$1">$1</h2>')
+                .replace(/^### (.*$)/gm, '<h3 id="$1">$1</h3>')
+                .replace(/^#### (.*$)/gm, '<h4 id="$1">$1</h4>')
                 
                 // Жирный текст
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -476,25 +564,45 @@
                 // Курсив
                 .replace(/\*(.*?)\*/g, '<em>$1</em>')
                 
+                // Блоки кода с обработкой
+                .replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+                    const language = lang || detectLanguage(code);
+                    const codeId = 'code-' + Math.random().toString(36).substr(2, 9);
+                    return `
+                        <div class="code-block" id="${codeId}">
+                            <div class="code-header">
+                                <span class="code-language">${language}</span>
+                                <button class="copy-button" onclick="copyCode('${codeId}')">Копировать</button>
+                            </div>
+                            <code>${escapeHtml(code)}</code>
+                        </div>
+                    `;
+                })
+                
+                // Inline код
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                
+                // Ссылки (уже обработаны processDocLinks)
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, url) => {
+                    // Если ссылка уже обработана processDocLinks, пропускаем
+                    if (url.includes('doc-link')) return match;
+                    // Внешние ссылки
+                    return `<a href="${url}" class="external-link" target="_blank">${text}</a>`;
+                })
+                
                 // Списки
-                .replace(/^\s*\*\s(.*$)/gm, '<li>$1</li>')
-                .replace(/^\s*-\s(.*$)/gm, '<li>$1</li>')
-                .replace(/^\s*\d\.\s(.*$)/gm, '<li>$1</li>')
+                .replace(/^\s*[-*]\s+(.*$)/gm, '<li>$1</li>')
+                .replace(/^\s*\d+\.\s+(.*$)/gm, '<li>$1</li>')
                 
                 // Оборачиваем списки в ul/ol
                 .replace(/(<li>.*<\/li>)/gs, (match) => {
-                    if (match.includes('<li>1.')) {
+                    // Проверяем, начинается ли первый элемент с числа
+                    const lines = match.split('</li><li>');
+                    if (lines[0].startsWith('<li>1.')) {
                         return `<ol>${match}</ol>`;
                     }
                     return `<ul>${match}</ul>`;
                 })
-                
-                // Код
-                .replace(/`([^`]+)`/g, '<code>$1</code>')
-                .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
-                
-                // Ссылки
-                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
                 
                 // Параграфы
                 .replace(/\n\n/g, '</p><p>')
@@ -503,23 +611,193 @@
                 // Горизонтальные линии
                 .replace(/^---$/gm, '<hr>')
                 
-                // Таблицы (базовая поддержка)
-                .replace(/\|(.+)\|/g, (match) => {
-                    const cells = match.split('|').filter(cell => cell.trim());
-                    if (cells.length > 1) {
-                        const isHeader = match.includes('---');
-                        if (isHeader) return '';
-                        return `<tr>${cells.map(cell => `<td>${cell.trim()}</td>`).join('')}</tr>`;
-                    }
-                    return match;
+                // Таблицы
+                .replace(/^\|(.+)\|$/gm, (match, line, offset, string) => {
+                    // Пропускаем строки разделители
+                    if (line.includes('---')) return '';
+                    
+                    const cells = line.split('|').map(cell => cell.trim());
+                    return `<tr>${cells.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
                 })
-                .replace(/<tr>[\s\S]*?<\/tr>/g, (match) => {
+                .replace(/(<tr>[\s\S]*?<\/tr>)/g, (match) => {
                     if (match.includes('<td>')) {
                         return `<table>${match}</table>`;
                     }
                     return match;
                 });
         }
+        
+        // Обработка ссылок на другие документы
+        function processDocLinks(markdown, currentFilePath) {
+            // Регулярное выражение для поиска ссылок на MD файлы
+            const mdLinkRegex = /\[([^\]]+)\]\(([^)#?]+\.md)(?:#([^)]+))?\)/g;
+            
+            return markdown.replace(mdLinkRegex, (match, text, file, anchor) => {
+                // Определяем полный путь к файлу
+                let targetFile = file;
+                
+                // Если ссылка относительная, вычисляем полный путь
+                if (!file.startsWith('http')) {
+                    const currentDir = currentFilePath.includes('/') 
+                        ? currentFilePath.substring(0, currentFilePath.lastIndexOf('/') + 1)
+                        : '';
+                    
+                    if (file.startsWith('./')) {
+                        targetFile = currentDir + file.substring(2);
+                    } else if (file.startsWith('../')) {
+                        // Простая обработка относительных путей
+                        const pathParts = currentDir.split('/').filter(p => p);
+                        const relParts = file.split('/').filter(p => p);
+                        
+                        for (const part of relParts) {
+                            if (part === '..') {
+                                pathParts.pop();
+                            } else {
+                                pathParts.push(part);
+                            }
+                        }
+                        targetFile = pathParts.join('/');
+                    } else if (!file.includes('/')) {
+                        targetFile = currentDir + file;
+                    }
+                }
+                
+                // Если это ссылка на внешний ресурс, оставляем как есть
+                if (file.startsWith('http')) {
+                    return match;
+                }
+                
+                // Создаем внутреннюю ссылку
+                const anchorPart = anchor ? `#${anchor}` : '';
+                return `<a href="#" class="doc-link" data-doc="${targetFile}${anchorPart}">${text}</a>`;
+            });
+        }
+        
+        // Функция для экранирования HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Определение языка кода
+        function detectLanguage(code) {
+            const lowerCode = code.toLowerCase();
+            if (lowerCode.includes('#include') || lowerCode.includes('int main') || lowerCode.includes('void')) return 'c';
+            if (lowerCode.includes('mov ') || lowerCode.includes('db ') || lowerCode.includes('asm')) return 'assembly';
+            if (lowerCode.includes('make ') || lowerCode.includes('gcc ') || lowerCode.includes('./configure')) return 'bash';
+            if (lowerCode.includes('git ') || lowerCode.includes('clone ') || lowerCode.includes('push')) return 'git';
+            if (lowerCode.includes('cmake') || lowerCode.includes('add_executable')) return 'cmake';
+            if (lowerCode.includes('python') || lowerCode.includes('def ') || lowerCode.includes('import ')) return 'python';
+            if (lowerCode.includes('{') && lowerCode.includes('}') && lowerCode.includes('function')) return 'javascript';
+            return 'text';
+        }
+        
+        // Добавление кнопок копирования
+        function addCopyButtons() {
+            // Также добавляем кнопки копирования для простых блоков pre>code
+            document.querySelectorAll('pre').forEach(pre => {
+                if (!pre.querySelector('.copy-button')) {
+                    const codeId = 'code-' + Math.random().toString(36).substr(2, 9);
+                    pre.id = codeId;
+                    
+                    const codeContent = pre.textContent;
+                    const language = detectLanguage(codeContent);
+                    
+                    const header = document.createElement('div');
+                    header.className = 'code-header';
+                    header.innerHTML = `
+                        <span class="code-language">${language}</span>
+                        <button class="copy-button" onclick="copyCode('${codeId}')">Копировать</button>
+                    `;
+                    
+                    pre.insertBefore(header, pre.firstChild);
+                }
+            });
+        }
+        
+        // Обработка внутренних ссылок
+        function processInternalLinks() {
+            document.querySelectorAll('.doc-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const docPath = link.getAttribute('data-doc');
+                    
+                    if (docPath) {
+                        // Разделяем путь к файлу и якорь
+                        const parts = docPath.split('#');
+                        const filePath = parts[0];
+                        const anchor = parts[1];
+                        
+                        // Загружаем документ
+                        loadDocumentation(filePath).then(() => {
+                            // Прокручиваем к якорю если есть
+                            if (anchor) {
+                                setTimeout(() => {
+                                    const element = document.getElementById(anchor);
+                                    if (element) {
+                                        element.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                }, 100);
+                            }
+                        });
+                    }
+                });
+            });
+        }
+        
+        // Обновление активной ссылки в навигации
+        function updateActiveNavLink(filePath) {
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-doc') === filePath) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        // Функция копирования кода
+        window.copyCode = function(codeBlockId) {
+            const codeBlock = document.getElementById(codeBlockId);
+            if (!codeBlock) return;
+            
+            const codeElement = codeBlock.querySelector('code') || codeBlock;
+            const codeText = codeElement.textContent;
+            
+            // Используем Clipboard API
+            navigator.clipboard.writeText(codeText).then(() => {
+                const button = codeBlock.querySelector('.copy-button');
+                if (button) {
+                    const originalText = button.textContent;
+                    button.textContent = 'Скопировано!';
+                    button.classList.add('copied');
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.classList.remove('copied');
+                    }, 2000);
+                }
+            }).catch(err => {
+                console.error('Ошибка при копировании:', err);
+                // Fallback для старых браузеров
+                const textArea = document.createElement('textarea');
+                textArea.value = codeText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const button = codeBlock.querySelector('.copy-button');
+                if (button) {
+                    button.textContent = 'Скопировано!';
+                    button.classList.add('copied');
+                    setTimeout(() => {
+                        button.textContent = 'Копировать';
+                        button.classList.remove('copied');
+                    }, 2000);
+                }
+            });
+        };
         
         // Обработчики событий для навигации
         navLinks.forEach(link => {
@@ -528,8 +806,12 @@
                 const filePath = link.getAttribute('data-doc');
                 loadDocumentation(filePath);
                 
-                // Обновляем URL без перезагрузки страницы
-                history.pushState({ filePath }, '', `#${filePath}`);
+                // Обновляем URL
+                const newUrl = `${BASE_URL}/doc#${filePath}`;
+                history.pushState({ filePath }, '', newUrl);
+                
+                // Обновляем title
+                document.title = `Lakos OS - ${filePath}`;
             });
         });
         
@@ -542,52 +824,55 @@
         
         // Загружаем документацию при загрузке страницы
         document.addEventListener('DOMContentLoaded', () => {
-            // Проверяем хеш в URL
+            // Парсим хеш из URL
+            let filePath = 'README.md';
             const hash = window.location.hash.substring(1);
-            const defaultDoc = hash || 'README.md';
             
-            // Устанавливаем активную ссылку
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('data-doc') === defaultDoc) {
-                    link.classList.add('active');
+            if (hash) {
+                // Проверяем, является ли хеш путем к файлу
+                if (hash.endsWith('.md')) {
+                    filePath = hash;
+                } else if (hash.includes('/')) {
+                    // Если содержит слэши, возможно это путь
+                    filePath = hash;
                 }
-            });
+            }
             
             // Загружаем документацию
-            loadDocumentation(defaultDoc);
+            loadDocumentation(filePath);
             
             // Инициализируем историю
-            history.replaceState({ filePath: defaultDoc }, '', `#${defaultDoc}`);
+            const initialUrl = `${BASE_URL}/doc#${filePath}`;
+            history.replaceState({ filePath }, '', initialUrl);
+            document.title = `Lakos OS - ${filePath}`;
         });
         
-        // Функция для получения списка всех доступных файлов документации
-        async function fetchDocsList() {
-            try {
-                const apiUrl = `${GITHUB_API}/${REPO_OWNER}/${REPO_NAME}/contents/${DOCS_PATH}`;
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-                console.log('Доступные файлы документации:', data);
-            } catch (error) {
-                console.error('Ошибка при получении списка файлов:', error);
+        // Обработка якорей при загрузке
+        window.addEventListener('load', () => {
+            const hash = window.location.hash;
+            if (hash && hash.includes('#')) {
+                const parts = hash.split('#');
+                if (parts.length > 1) {
+                    const anchor = parts[1];
+                    setTimeout(() => {
+                        const element = document.getElementById(anchor);
+                        if (element) {
+                            element.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }, 500);
+                }
             }
-        }
+        });
         
-        // Дополнительные функции для улучшения отображения
-        function enhanceCodeBlocks() {
-            document.querySelectorAll('pre code').forEach(block => {
-                // Добавляем подсветку синтаксиса (базовая)
-                const language = detectLanguage(block.textContent);
-                block.className = `language-${language}`;
-            });
-        }
-        
-        function detectLanguage(code) {
-            if (code.includes('#include') || code.includes('int main')) return 'c';
-            if (code.includes('mov ') || code.includes('db ')) return 'assembly';
-            if (code.includes('make ') || code.includes('gcc ')) return 'bash';
-            if (code.includes('git ') || code.includes('clone')) return 'git';
-            return 'text';
+        // Обработка прямых ссылок на GitHub Pages
+        if (window.location.pathname.includes('/doc')) {
+            const pathParts = window.location.pathname.split('/');
+            if (pathParts.length > 2 && pathParts[pathParts.length - 2] === 'doc') {
+                const docFile = pathParts[pathParts.length - 1];
+                if (docFile.endsWith('.md')) {
+                    loadDocumentation(docFile);
+                }
+            }
         }
     </script>
 </body>

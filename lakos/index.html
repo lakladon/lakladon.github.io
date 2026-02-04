@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lakos OS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai.min.css">
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            background-color: #000000; 
+            color: #ffffff; 
+            font-family: 'Courier New', 'Monaco', monospace;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ffffff;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex: 1;
+        }
+        
+        .header-logo {
+            width: 449px;
+            height: 91px;
+            flex-shrink: 0;
+            border: 1px solid #ffffff;
+            object-fit: contain;
+            background-color: #000000;
+        }
+        
+        .header-content {
+            flex-grow: 1;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background-color: #000000;
+            color: #ffffff;
+            border: 1px solid #ffffff;
+            padding: 12px 24px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        
+        .btn-primary {
+            background-color: #ffffff;
+            color: #000000;
+            font-weight: bold;
+        }
+        
+        .btn-primary:hover {
+            background-color: #000000;
+            color: #ffffff;
+        }
+        
+        h1, h2, h3 {
+            font-weight: normal;
+            margin: 20px 0 10px 0;
+        }
+        
+        h1 { 
+            font-size: 2.8em; 
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+        
+        h2 { 
+            font-size: 1.8em; 
+            margin-top: 35px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #ffffff;
+        }
+        
+        h3 { 
+            font-size: 1.4em; 
+            margin-top: 25px;
+        }
+        
+        .section {
+            margin-bottom: 35px;
+        }
+        
+        .code-block {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-radius: 5px;
+            position: relative;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .copy-btn {
+            background-color: #333;
+            color: #ffffff;
+            border: none;
+            padding: 5px 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background-color: #555;
+        }
+        
+        .color-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .color-demo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .color-box {
+            width: 25px;
+            height: 25px;
+            border: 1px solid #ffffff;
+            flex-shrink: 0;
+        }
+        
+        .color-black { 
+            background-color: #000000; 
+        }
+        
+        .color-white { 
+            background-color: #ffffff; 
+        }
+        
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .command-group {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid #ffffff;
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .command-group:hover {
+            transform: translateY(-2px);
+        }
+        
+        .command-group strong {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .command {
+            margin: 8px 0;
+            padding-left: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            color: #00ffff;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .feature-item {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid #ffffff;
+            padding: 20px;
+            font-size: 1em;
+            line-height: 1.5;
+            transition: all 0.3s;
+        }
+        
+        .feature-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: #00ffff;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 25px;
+            border-top: 1px solid #ffffff;
+            font-size: 0.95em;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        /* Подсветка синтаксиса */
+        .hljs {
+            background: transparent;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 900px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 25px;
+            }
+            
+            .header-left {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .header-logo {
+                width: 100%;
+                max-width: 449px;
+                height: auto;
+            }
+            
+            .header-actions {
+                justify-content: center;
+            }
+            
+            .color-info {
+                flex-direction: row;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            h2 {
+                font-size: 1.6em;
+            }
+            
+            .command-grid,
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            h2 {
+                font-size: 1.4em;
+            }
+            
+            h3 {
+                font-size: 1.2em;
+            }
+            
+            .header {
+                gap: 20px;
+                margin-bottom: 30px;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* Скроллбар */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #000000;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #ffffff;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #cccccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <img src="https://github.com/lakladon/lakos/blob/main/ass/lakos.png?raw=true" 
+                 alt="Lakos OS Logo" 
+                 class="header-logo"
+                 width="449"
+                 height="91">
+            <div class="header-content">
+                <h1>Lakos OS</h1>
+                <p>Минималистичная учебная ОС для i386</p>
+                <div class="color-info">
+                    <div class="color-demo">
+                        <div class="color-box color-black"></div>
+                        <span>RGB (0,0,0), HEX: #000000</span>
+                    </div>
+                    <div class="color-demo">
+                        <div class="color-box color-white"></div>
+                        <span>RGB (255,255,255), HEX: #ffffff</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="header-actions">
+            <a href="#getting-started" class="btn btn-primary">Быстрый старт</a>
+            <a href="#documentation" class="btn">Документация</a>
+            <a href="https://github.com/lakladon/lakos" target="_blank" class="btn">GitHub</a>
+        </div>
+    </div>
+
+    <div class="section" id="getting-started">
+        <h2>🚀 Быстрый старт</h2>
+        <p>Начните работу с LakOS за несколько минут:</p>
+        
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="copyCommand('make iso')">Копировать команду сборки</button>
+            <a href="#requirements" class="btn">Требования</a>
+            <a href="#usage" class="btn">Использование</a>
+        </div>
+        
+        <div class="code-block">
+            <div class="code-header">
+                <span>Сборка проекта</span>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+            </div>
+            <pre><code class="language-bash"># Клонирование репозитория
+git clone https://github.com/lakladon/lakos.git
+cd lakos
+
+# Сборка ISO-образа
+make iso
+
+# Запуск в QEMU
+qemu-system-i386 -cdrom lakos.iso -m 512M</code></pre>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📋 Описание</h2>
+        <p>Проект включает ядро, примитивный shell, tar‑базированную rootfs и небольшой набор пользовательских программ.</p>
+    </div>
+
+    <div class="section">
+        <h2>✨ Возможности</h2>
+        <div class="feature-grid">
+            <div class="feature-item">загрузка через GRUB (Multiboot)</div>
+            <div class="feature-item">текстовый терминал VGA с цветами, boot‑анимацией и информацией о системе</div>
+            <div class="feature-item">shell с историей команд и автодополнением</div>
+            <div class="feature-item">tar‑файловая система, вшитая в образ (modules.tar)</div>
+            <div class="feature-item">базовый набор команд: навигация, работа с файлами, диски, пользователи</div>
+            <div class="feature-item">простые пользовательские программы (rootfs/bin), запуск ELF‑бинарников</div>
+            <div class="feature-item">примитивный GUI (команда gui)</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🔨 Быстрый старт (сборка)</h2>
+        
+        <div class="code-block">
+            <div class="code-header">
+                <span>Основная команда</span>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+            </div>
+            <pre><code class="language-makefile">make iso</code></pre>
+        </div>
+        
+        <p>Артефакты сборки:</p>
+        <ul>
+            <li><code>lakos.bin</code> — бинарь ядра</li>
+            <li><code>modules.tar</code> — архив rootfs</li>
+            <li><code>lakos.iso</code> — загрузочный ISO</li>
+        </ul>
+        
+        <h3>Очистка:</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Очистка проекта</span>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+            </div>
+            <pre><code class="language-makefile">make clean</code></pre>
+        </div>
+    </div>
+
+    <div class="section" id="requirements">
+        <h2>⚙️ Требования</h2>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Установка зависимостей (Ubuntu/Debian)</span>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+            </div>
+            <pre><code class="language-bash">sudo apt update
+sudo apt install build-essential nasm grub2-common xorriso</code></pre>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn" onclick="showRequirements('arch')">Arch Linux</button>
+            <button class="btn" onclick="showRequirements('fedora')">Fedora</button>
+            <button class="btn" onclick="showRequirements('macos')">macOS</button>
+        </div>
+    </div>
+
+    <div class="section" id="usage">
+        <h2>💻 Как пользоваться в системе</h2>
+        <p>При старте ОС запускается логин. По умолчанию доступен пользователь:</p>
+        
+        <div class="code-block">
+            <div class="code-header">
+                <span>Учетные данные по умолчанию</span>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+            </div>
+            <pre><code class="language-bash">Логин: root
+Пароль: root</code></pre>
+        </div>
+        
+        <h3>Примеры команд в shell:</h3>
+        <div class="command-grid">
+            <div class="command-group">
+                <strong>навигация:</strong>
+                <div class="command">pwd</div>
+                <div class="command">ls</div>
+                <div class="command">cd</div>
+            </div>
+            
+            <div class="command-group">
+                <strong>файловые операции:</strong>
+                <div class="command">cat</div>
+                <div class="command">mkdir</div>
+                <div class="command">touch</div>
+                <div class="command">rm</div>
+                <div class="command">cp</div>
+                <div class="command">echo</div>
+            </div>
+            
+            <div class="command-group">
+                <strong>информация:</strong>
+                <div class="command">ver</div>
+                <div class="command">uname</div>
+                <div class="command">date</div>
+                <div class="command">whoami</div>
+            </div>
+            
+            <div class="command-group">
+                <strong>диски:</strong>
+                <div class="command">disks</div>
+                <div class="command">read_sector</div>
+                <div class="command">write_sector</div>
+                <div class="command">mount</div>
+            </div>
+            
+            <div class="command-group">
+                <strong>пользователи:</strong>
+                <div class="command">useradd</div>
+                <div class="command">userdel</div>
+                <div class="command">login</div>
+                <div class="command">passwd</div>
+            </div>
+            
+            <div class="command-group">
+                <strong>крипто:</strong>
+                <div class="command">crypt -e &lt;key&gt; &lt;text&gt;</div>
+                <div class="command">crypt -d &lt;key&gt; &lt;text&gt;</div>
+            </div>
+            
+            <div class="command-group">
+                <strong>прочее:</strong>
+                <div class="command">cls</div>
+                <div class="command">shutdown</div>
+                <div class="command">reboot</div>
+                <div class="command">gui</div>
+            </div>
+        </div>
+        
+        <h3>Доступные пользовательские программы в /bin:</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Пользовательские программы</span>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+            </div>
+            <pre><code class="language-bash">hello      # Демонстрационная программа
+test       # Тестовые утилиты
+editor     # Текстовый редактор
+calc       # Простой калькулятор</code></pre>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🏗️ Архитектура проекта</h2>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Структура проекта</span>
+                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+            </div>
+            <pre><code class="language-bash">boot/        # загрузчик и стартовый код
+kernel/      # ядро, драйверы, shell, GUI
+rootfs/      # содержимое файловой системы
+ass/         # ассеты (изображения/иконки)</code></pre>
+        </div>
+    </div>
+
+    <div class="section" id="documentation">
+        <h2>📚 Документация</h2>
+        <p>Полная документация доступна в репозитории проекта:</p>
+        
+        <div class="action-buttons">
+            <a href="#documentation-view" class="btn btn-primary" onclick="showDocumentation()">Открыть документацию</a>
+            <a href="https://github.com/lakladon/lakos/tree/main/docs" target="_blank" class="btn">GitHub Docs</a>
+        </div>
+        
+        <div id="doc-preview" style="display: none; margin-top: 20px;">
+            <div class="code-block">
+                <div class="code-header">
+                    <span>Структура документации</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                </div>
+                <pre><code class="language-bash">docs/
+├── README.md                      # Главная страница
+├── QUICKSTART.md                  # Быстрый старт
+├── ARCHITECTURE.md                # Архитектура
+├── BUILDING.md                    # Сборка
+├── USER_GUIDE.md                  # Руководство пользователя
+├── DEVELOPER_GUIDE.md             # Руководство разработчика
+├── CONTRIBUTING.md                # Как внести вклад
+└── internals/                     # Внутреннее устройство
+    ├── KERNEL.md                  # Ядро
+    ├── BOOT_SEQUENCE.md           # Загрузка
+    ├── FILESYSTEM.md              # Файловая система
+    ├── SHELL_IMPLEMENTATION.md    # Shell
+    └── DRIVERS.md                 # Драйверы</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🚀 Авто‑релизы (GitHub Actions)</h2>
+        <p>Workflow .github/workflows/deploy.yml автоматически:</p>
+        <ul>
+            <li>вычисляет следующий тег версии vX.Y.Z;</li>
+            <li>создаёт и пушит тег;</li>
+            <li>собирает lakos.iso и modules.tar;</li>
+            <li>публикует GitHub Release с артефактами.</li>
+        </ul>
+        
+        <div class="action-buttons">
+            <a href="https://github.com/lakladon/lakos/releases" target="_blank" class="btn btn-primary">Скачать последний релиз</a>
+            <a href="https://github.com/lakladon/lakos/actions" target="_blank" class="btn">Посмотреть workflow</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Lakos OS &copy; Учебная операционная система для архитектуры i386</p>
+        <p>Цветовая схема: RGB (0,0,0), HEX: #000000 и RGB (255,255,255), HEX: #ffffff</p>
+        <div class="action-buttons" style="justify-content: center; margin-top: 20px;">
+            <a href="#" class="btn">Наверх ↑</a>
+            <a href="https://github.com/lakladon/lakos" target="_blank" class="btn">⭐ Star на GitHub</a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/makefile.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+    <script>
+        // Инициализация подсветки синтаксиса
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+        
+        // Функция копирования кода
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block').querySelector('code');
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Скопировано!';
+                button.style.backgroundColor = '#4CAF50';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.backgroundColor = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('Ошибка при копировании: ', err);
+                button.textContent = 'Ошибка!';
+                button.style.backgroundColor = '#f44336';
+            });
+        }
+        
+        // Функция копирования команды
+        function copyCommand(command) {
+            navigator.clipboard.writeText(command).then(() => {
+                alert(`Команда "${command}" скопирована в буфер обмена!`);
+            }).catch(err => {
+                console.error('Ошибка при копировании: ', err);
+                alert('Ошибка при копировании команды');
+            });
+        }
+        
+        // Показать требования для разных ОС
+        function showRequirements(os) {
+            const requirements = {
+                'arch': `sudo pacman -S base-devel nasm grub xorriso`,
+                'fedora': `sudo dnf install gcc nasm grub2 xorriso`,
+                'macos': `brew install i686-elf-gcc nasm xorriso`
+            };
+            
+            const codeBlock = document.querySelector('#requirements .code-block');
+            const codeElement = codeBlock.querySelector('code');
+            const header = codeBlock.querySelector('.code-header span');
+            
+            header.textContent = `Установка зависимостей (${getOSName(os)})`;
+            codeElement.textContent = requirements[os];
+            hljs.highlightElement(codeElement);
+        }
+        
+        function getOSName(os) {
+            const names = {
+                'arch': 'Arch Linux',
+                'fedora': 'Fedora',
+                'macos': 'macOS'
+            };
+            return names[os] || os;
+        }
+        
+        // Показать документацию
+        function showDocumentation() {
+            const docPreview = document.getElementById('doc-preview');
+            docPreview.style.display = docPreview.style.display === 'none' ? 'block' : 'none';
+            
+            // Пересветить код после отображения
+            setTimeout(() => {
+                document.querySelectorAll('#doc-preview pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+            }, 100);
+        }
+        
+        // Плавная прокрутка
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
+                }
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Интерактивные команды
+        document.querySelectorAll('.command').forEach(command => {
+            command.addEventListener('click', function() {
+                const cmdText = this.textContent.trim();
+                copyCommand(cmdText);
+            });
+            
+            // Добавляем указатель при наведении
+            command.style.cursor = 'pointer';
+            command.title = 'Кликните чтобы скопировать команду';
+        });
+    </script>
+</body>
+</html>

@@ -7,7 +7,6 @@
     <meta name="keywords" content="Linux, программирование, Python, Bash, Arch Linux, железо, IT блог">
     <title>Блог /dev/null</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-calendar/1.3.1/github-calendar.min.css">
     <style>
         :root {
             --primary-color: #00ccff;
@@ -37,7 +36,7 @@
             font-family: 'JetBrains Mono', 'Courier New', monospace;
             line-height: 1.6;
             transition: all 0.3s ease;
-            overflow-x: hidden;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><rect x="0" y="7" width="16" height="2" fill="%2300ccff"/><rect x="7" y="0" width="2" height="16" fill="%2300ccff"/></svg>'), auto;
         }
 
         canvas {
@@ -49,13 +48,14 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
             background-color: rgba(0, 26, 51, 0.7);
             backdrop-filter: blur(5px);
+            border-left: 1px solid var(--primary-color);
+            border-right: 1px solid var(--primary-color);
             min-height: 100vh;
-            box-sizing: border-box;
         }
 
         .light-theme .container {
@@ -69,9 +69,9 @@
             margin-bottom: 40px;
         }
 
-        h1, h2, h3, h4 {
+        h1, h2, h3 {
             color: var(--primary-color);
-            margin-top: 0;
+            text-shadow: var(--header-shadow);
         }
 
         h1 {
@@ -95,9 +95,9 @@
         nav a {
             color: var(--primary-color);
             text-decoration: none;
-            padding: 8px 16px;
+            padding: 5px 10px;
             border: 1px solid var(--primary-color);
-            border-radius: 5px;
+            border-radius: 3px;
             transition: all 0.3s;
         }
 
@@ -105,148 +105,131 @@
             background-color: var(--primary-color);
             color: var(--dark-blue);
             transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .section {
             margin-bottom: 50px;
-            padding: 25px;
-            background: var(--card-bg);
-            border-radius: 10px;
-            border-left: 4px solid var(--primary-color);
-            box-sizing: border-box;
-            overflow: hidden;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--secondary-color);
         }
 
-        .github-stats {
+        .tech-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
 
-        .stat-card {
-            background: rgba(0, 102, 204, 0.2);
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid var(--primary-color);
+        .tech-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 3px solid var(--primary-color);
             transition: transform 0.3s;
         }
 
-        .stat-card:hover {
+        .tech-card:hover {
             transform: translateY(-5px);
         }
 
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
+        .tech-card i {
+            margin-right: 8px;
             color: var(--primary-color);
-            margin: 10px 0;
         }
 
-        .repos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        .hardware-specs {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .spec-item {
+            margin-bottom: 10px;
+            display: flex;
+        }
+
+        .spec-label {
+            width: 150px;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--primary-color);
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-links {
+            margin-top: 15px;
+        }
+
+        .project-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin-right: 15px;
+            border-bottom: 1px dashed var(--primary-color);
+            transition: all 0.3s;
+        }
+
+        .project-links a:hover {
+            border-bottom: 1px solid var(--primary-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid var(--secondary-color);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
             gap: 20px;
             margin-top: 20px;
         }
 
-        .repo-card {
-            background: rgba(0, 68, 136, 0.3);
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 3px solid var(--primary-color);
-            transition: all 0.3s;
-        }
-
-        .repo-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 204, 255, 0.2);
-        }
-
-        .repo-name {
+        .social-links a {
             color: var(--primary-color);
-            font-size: 1.2rem;
-            margin-bottom: 10px;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: transform 0.3s;
         }
 
-        .repo-desc {
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-            color: var(--text-color);
-            opacity: 0.8;
+        .social-links a:hover {
+            transform: translateY(-3px) scale(1.1);
         }
 
-        .repo-stats {
-            display: flex;
-            gap: 15px;
-            font-size: 0.85rem;
-            color: var(--primary-color);
+        code {
+            background-color: rgba(0, 102, 204, 0.3);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
         }
 
-        .calendar-container {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(0, 68, 136, 0.2);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .calendar-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            padding-bottom: 10px;
-        }
-
-        .calendar-wrapper::-webkit-scrollbar {
-            height: 8px;
-        }
-
-        .calendar-wrapper::-webkit-scrollbar-track {
-            background: rgba(0, 102, 204, 0.1);
-            border-radius: 4px;
-        }
-
-        .calendar-wrapper::-webkit-scrollbar-thumb {
-            background: var(--primary-color);
-            border-radius: 4px;
-        }
-
-        .github-calendar {
-            min-width: 800px;
-            width: 100%;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: var(--primary-color);
-        }
-
-        .spinner {
-            border: 3px solid var(--card-bg);
-            border-top: 3px solid var(--primary-color);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .error-message {
-            background: rgba(255, 0, 0, 0.1);
-            border: 1px solid #ff0000;
-            color: #ff6666;
+        pre {
+            background-color: rgba(0, 0, 0, 0.3);
             padding: 15px;
+            border-left: 3px solid var(--primary-color);
+            overflow-x: auto;
             border-radius: 5px;
-            margin: 10px 0;
         }
 
+        .light-theme pre {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Новые стили для добавленных элементов */
         .theme-toggle {
             position: fixed;
             top: 20px;
@@ -254,282 +237,197 @@
             background: var(--card-bg);
             border: 1px solid var(--primary-color);
             color: var(--primary-color);
-            padding: 10px 15px;
+            padding: 5px 10px;
             border-radius: 5px;
             cursor: pointer;
-            z-index: 1000;
-            font-family: inherit;
+            z-index: 100;
         }
 
-        /* Стили для графика языков */
-        .languages-section {
-            margin-top: 30px;
-        }
-
-        .charts-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 30px;
-            margin-top: 20px;
-        }
-
-        .chart-wrapper {
-            background: rgba(0, 68, 136, 0.2);
-            padding: 25px;
-            border-radius: 10px;
-            border: 1px solid var(--primary-color);
-        }
-
-        .chart-title {
-            text-align: center;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-        }
-
-        .chart-container {
-            position: relative;
-            height: 350px;
-            width: 100%;
-        }
-
-        .language-details {
-            margin-top: 20px;
+        .fact-container {
+            background: var(--card-bg);
             padding: 15px;
-            background: rgba(0, 102, 204, 0.1);
-            border-radius: 8px;
+            border-radius: 5px;
+            margin: 20px 0;
             border-left: 3px solid var(--primary-color);
         }
 
-        .language-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .language-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 5px 12px;
-            background: rgba(0, 68, 136, 0.3);
-            border-radius: 20px;
-            border: 1px solid var(--primary-color);
-        }
-
-        .language-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .language-name {
+        .fact-button {
+            background: var(--primary-color);
+            color: var(--dark-blue);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
             font-weight: bold;
-            color: var(--primary-color);
+            transition: all 0.3s;
         }
 
-        .language-count {
-            font-size: 0.9rem;
-            opacity: 0.8;
+        .fact-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .language-percentage {
-            font-size: 0.8rem;
-            color: var(--secondary-color);
-            margin-left: 5px;
+        .terminal {
+            background: rgba(0, 0, 0, 0.7);
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
         }
 
-        .calendar-info {
+        .terminal-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
+            margin-bottom: 10px;
+            color: var(--primary-color);
         }
 
-        .calendar-legend {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
+        .terminal-body {
+            line-height: 1.5;
         }
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.85rem;
+        .command {
+            color: #00ccff;
         }
 
-        .legend-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
-        }
-
-        .mobile-calendar-note {
-            display: none;
-            background: rgba(0, 204, 255, 0.1);
-            border: 1px solid var(--primary-color);
-            padding: 10px;
+        .skill-bar {
+            width: 100%;
+            background-color: rgba(0, 102, 204, 0.2);
             border-radius: 5px;
             margin: 10px 0;
-            font-size: 0.9rem;
-            text-align: center;
+            overflow: hidden;
         }
 
-        /* Таблица языков */
-        .languages-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .languages-table th,
-        .languages-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid rgba(0, 204, 255, 0.2);
-        }
-
-        .languages-table th {
-            background: rgba(0, 102, 204, 0.2);
-            color: var(--primary-color);
+        .skill-progress {
+            height: 20px;
+            background-color: var(--primary-color);
+            border-radius: 5px;
+            text-align: right;
+            padding-right: 10px;
+            line-height: 20px;
+            color: var(--dark-blue);
             font-weight: bold;
         }
 
-        .languages-table tr:hover {
-            background: rgba(0, 204, 255, 0.1);
+        .blog-post {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
         }
 
-        .table-language-cell {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .post-date {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
         }
 
-        @media (max-width: 1024px) {
-            .charts-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .chart-container {
-                height: 300px;
-            }
+        .post-title {
+            margin: 0 0 10px 0;
+        }
+
+        .post-excerpt {
+            margin-bottom: 15px;
+        }
+
+        .read-more {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Стили для видео раздела */
+        .video-section {
+            margin: 30px 0;
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            margin: 20px 0;
+            border-radius: 5px;
+            border: 1px solid var(--primary-color);
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .video-card {
+            background: var(--card-bg);
+            border-radius: 5px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            border: 1px solid var(--primary-color);
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .video-info {
+            padding: 15px;
         }
 
         @media (max-width: 768px) {
             .container {
-                padding: 15px;
-                width: 100%;
-                max-width: 100%;
-            }
-            
-            .section {
-                padding: 20px;
-                margin-bottom: 30px;
-            }
-            
-            nav {
-                gap: 10px;
-            }
-            
-            nav a {
-                padding: 6px 12px;
-                font-size: 0.9rem;
-            }
-            
-            .repos-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .theme-toggle {
-                top: 10px;
-                right: 10px;
-                padding: 8px 12px;
-                font-size: 0.9rem;
-            }
-            
-            .calendar-wrapper {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-            
-            .github-calendar {
-                min-width: 700px;
-            }
-            
-            .mobile-calendar-note {
-                display: block;
-            }
-            
-            .calendar-info {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .chart-container {
-                height: 250px;
-            }
-            
-            .charts-container {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .chart-wrapper {
-                padding: 20px;
+                padding: 10px;
             }
             
             h1 {
                 font-size: 2rem;
             }
             
-            .subtitle {
-                font-size: 1rem;
+            nav {
+                flex-wrap: wrap;
             }
-        }
+            
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .spec-item {
+                flex-direction: column;
+            }
+            
+            .spec-label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
 
-        @media (max-width: 480px) {
-            .container {
-                padding: 10px;
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                font-size: 0.8rem;
             }
-            
-            .section {
-                padding: 15px;
-            }
-            
-            .github-calendar {
-                min-width: 600px;
-            }
-            
-            .stat-number {
-                font-size: 2rem;
-            }
-            
-            .github-stats {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-            
-            .chart-container {
-                height: 220px;
-            }
-            
-            .languages-table {
-                font-size: 0.85rem;
-            }
-            
-            .languages-table th,
-            .languages-table td {
-                padding: 8px 10px;
+
+            .video-grid {
+                grid-template-columns: 1fr;
             }
         }
 
         @font-face {
             font-family: 'JetBrains Mono';
             src: url('https://cdnjs.cloudflare.com/ajax/libs/jetbrains-mono/1.0.6/web/woff2/JetBrainsMono-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
         }
     </style>
 </head>
@@ -541,171 +439,99 @@
     
     <div class="container">
         <header>
-            <h1><i class="fab fa-github"></i> /dev/null</h1>
-            <div class="subtitle">GitHub активность: @lakladon | Статистика языков программирования</div>
+            <h1>/dev/null</h1>
+            <div class="subtitle">Блог randomhero о Linux, программировании и железе</div>
         </header>
         
         <nav>
-            <a href="#github-stats"><i class="fas fa-chart-line"></i> Статистика</a>
-            <a href="#languages"><i class="fas fa-code"></i> Языки</a>
-            <a href="#repositories"><i class="fas fa-code-branch"></i> Репозитории</a>
-            <a href="#activity"><i class="fas fa-calendar-alt"></i> Активность</a>
             <a href="#about"><i class="fas fa-user"></i> Обо мне</a>
+            <a href="#tech"><i class="fas fa-code"></i> Stack</a>
+            <a href="#hardware"><i class="fas fa-laptop"></i> Моё железо</a>
+            <a href="#projects"><i class="fas fa-project-diagram"></i> Проекты</a>
+            <a href="#videos"><i class="fas fa-video"></i> Видео</a>
+            <a href="#blog"><i class="fas fa-book"></i> Блог</a>
             <a href="#contact"><i class="fas fa-envelope"></i> Контакты</a>
         </nav>
         
-        <!-- Статистика GitHub -->
-        <section id="github-stats" class="section">
-            <h2><i class="fas fa-chart-bar"></i> GitHub Статистика</h2>
-            <div id="stats-container" class="github-stats">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Загрузка статистики...</p>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Графики по языкам программирования -->
-        <section id="languages" class="section languages-section">
-            <h2><i class="fas fa-language"></i> Языки программирования</h2>
-            <p>Распределение языков в моих репозиториях на GitHub</p>
-            
-            <div class="charts-container">
-                <div class="chart-wrapper">
-                    <h3 class="chart-title">Круговой график</h3>
-                    <div class="chart-container">
-                        <canvas id="languages-doughnut-chart"></canvas>
-                    </div>
-                </div>
-                
-                <div class="chart-wrapper">
-                    <h3 class="chart-title">Столбчатый график</h3>
-                    <div class="chart-container">
-                        <canvas id="languages-bar-chart"></canvas>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="language-details">
-                <h3><i class="fas fa-list"></i> Подробная статистика</h3>
-                <div id="languages-list" class="language-list">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <p>Загрузка данных о языках...</p>
-                    </div>
-                </div>
-                
-                <div style="margin-top: 20px;">
-                    <h4><i class="fas fa-table"></i> Таблица языков</h4>
-                    <table class="languages-table" id="languages-table">
-                        <thead>
-                            <tr>
-                                <th>Язык</th>
-                                <th>Количество репозиториев</th>
-                                <th>Процент</th>
-                                <th>Цвет</th>
-                            </tr>
-                        </thead>
-                        <tbody id="languages-table-body">
-                            <tr>
-                                <td colspan="4" style="text-align: center;">
-                                    <div class="loading">
-                                        <div class="spinner"></div>
-                                        <p>Загрузка таблицы...</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Репозитории -->
-        <section id="repositories" class="section">
-            <h2><i class="fas fa-code"></i> Мои репозитории</h2>
-            <div id="repos-container" class="repos-grid">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Загрузка репозиториев...</p>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Календарь активности -->
-        <section id="activity" class="section">
-            <h2><i class="fas fa-calendar-alt"></i> Календарь активности</h2>
-            
-            <div class="calendar-info">
-                <h3 style="margin: 0;">Последний год активности</h3>
-                <div class="calendar-legend">
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #ebedf0;"></div>
-                        <span>Меньше</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #9be9a8;"></div>
-                        <span>1-2</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #40c463;"></div>
-                        <span>3-4</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #30a14e;"></div>
-                        <span>5+</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mobile-calendar-note">
-                <i class="fas fa-arrows-alt-h"></i> Прокрутите вправо, чтобы увидеть весь календарь
-            </div>
-            
-            <div class="calendar-container">
-                <div class="calendar-wrapper">
-                    <div id="github-graph" class="github-calendar">
-                        <div class="loading">
-                            <div class="spinner"></div>
-                            <p>Загрузка календаря активности...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Информация обо мне -->
         <section id="about" class="section">
             <h2><i class="fas fa-user"></i> Обо мне</h2>
             <p>Привет! Я Максим, известный в сети как <strong>/dev/null</strong> и <strong>randomhero</strong>. Мой путь в IT начался в 10 лет с командной строки Windows, а теперь я использую Arch Linux и пишу код на Python, Bash, JavaScript и Java.</p>
             
-            <div class="github-stats">
-                <div class="stat-card">
-                    <i class="fab fa-linux fa-2x"></i>
-                    <h3>Основная ОС</h3>
-                    <p>Arch Linux</p>
+            <p>В этом блоге я рассказываю о своем опыте работы с Linux, программировании и настройке оборудования.</p>
+
+            <div class="fact-container" id="fact-container">
+                Нажмите кнопку, чтобы узнать интересный факт о Linux!
+            </div>
+            <button class="fact-button" id="fact-button">
+                <i class="fas fa-lightbulb"></i> Показать факт
+            </button>
+        </section>
+        
+        <section id="tech" class="section">
+            <h2><i class="fas fa-code"></i> Stack</h2>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h3><i class="fab fa-linux"></i> Операционные системы</h3>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Arch Linux</li>
+                        <li><i class="fas fa-check"></i> Ubuntu Server</li>
+                        <li><i class="fas fa-check"></i> Windows 10 (редко)</li>
+                    </ul>
                 </div>
-                <div class="stat-card">
-                    <i class="fab fa-python fa-2x"></i>
-                    <h3>Основной язык</h3>
-                    <p>Python</p>
+                
+                <div class="tech-card">
+                    <h3><i class="fas fa-laptop-code"></i> Языки программирования</h3>
+                    <ul>
+                        <li><i class="fab fa-python"></i> Python (основной)</li>
+                        <li><i class="fas fa-terminal"></i> Bash</li>
+                        <li><i class="fab fa-js"></i> JavaScript</li>
+                        <li><i class="fab fa-java"></i> Java</li>
+                    </ul>
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-laptop-code fa-2x"></i>
-                    <h3>Специализация</h3>
-                    <p>Linux & Backend</p>
+                
+                <div class="tech-card">
+                    <h3><i class="fas fa-tools"></i> Инструменты</h3>
+                    <ul>
+                        <li><i class="fab fa-git-alt"></i> Git</li>
+                        <li><i class="fab fa-docker"></i> Docker</li>
+                        <li><i class="fas fa-code"></i> VSCode</li>
+                        <li><i class="fas fa-keyboard"></i> Neovim</li>
+                    </ul>
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-rocket fa-2x"></i>
-                    <h3>Опыт</h3>
-                    <p>5+ лет</p>
+                
+                <div class="tech-card">
+                    <h3><i class="fas fa-server"></i> Другое</h3>
+                    <ul>
+                        <li><i class="fas fa-terminal"></i> Linux administration</li>
+                        <li><i class="fas fa-network-wired"></i> Network basics</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;"><i class="fas fa-chart-bar"></i> Уровень навыков</h3>
+            <div>
+                <h4>Python <span style="float: right;">85%</span></h4>
+                <div class="skill-bar">
+                    <div class="skill-progress" style="width: 85%;">85%</div>
+                </div>
+
+                <h4>Bash <span style="float: right;">75%</span></h4>
+                <div class="skill-bar">
+                    <div class="skill-progress" style="width: 75%;">75%</div>
+                </div>
+
+                <h4>JavaScript <span style="float: right;">65%</span></h4>
+                <div class="skill-bar">
+                    <div class="skill-progress" style="width: 65%;">65%</div>
+                </div>
+
+                <h4>Linux Administration <span style="float: right;">80%</span></h4>
+                <div class="skill-bar">
+                    <div class="skill-progress" style="width: 80%;">80%</div>
                 </div>
             </div>
         </section>
         
-<<<<<<< HEAD
-        <!-- Контакты -->
-=======
         <section id="hardware" class="section">
             <h2><i class="fas fa-laptop"></i> Моё железо: ASUS X540NA</h2>
             <div class="hardware-specs">
@@ -825,7 +651,7 @@
                 
                 <div class="video-container">
                     <!-- Пример встроенного видео с YouTube -->
-                    <iframe width="640" height="480" src="https://www.youtube.com/embed/syof-CVe0CY" title="SystemDRedhat" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube.com/embed/syof-CVe0CY" ></iframe>
                 </div>
                 
                 <div class="video-grid">
@@ -893,113 +719,98 @@
             </div>
         </section>
         
->>>>>>> parent of 5bdeb26 (Update index.html)
         <section id="contact" class="section">
             <h2><i class="fas fa-envelope"></i> Контакты</h2>
-            <div class="github-stats">
-                <div class="stat-card">
-                    <i class="fab fa-github fa-2x"></i>
-                    <h3>GitHub</h3>
-                    <p>@lakladon</p>
-                    <a href="https://github.com/lakladon" target="_blank" style="color: var(--primary-color); text-decoration: none;">
-                        <i class="fas fa-external-link-alt"></i> Перейти
-                    </a>
+            <p>Вы можете связаться со мной через:</p>
+            <ul>
+                <li><i class="fas fa-envelope"></i> Email: randomhero@internet.ru</li>
+                <li><i class="fab fa-telegram"></i> Telegram: @LakLadon</li>
+                <li><i class="fab fa-discord"></i> Discord: @megaprokuror</li>
+                <li><i class="fab fa-github"></i> GitHub: github.com/lakladon</li>
+            </ul>
+
+            <div class="terminal" style="margin-top: 30px;">
+                <div class="terminal-header">
+                    <span>randomhero@devnull:~$</span>
+                    <span>contact.sh</span>
                 </div>
-                <div class="stat-card">
-                    <i class="fab fa-telegram fa-2x"></i>
-                    <h3>Telegram</h3>
-                    <p>@LakLadon</p>
-                    <a href="https://t.me/LakLadon" target="_blank" style="color: var(--primary-color); text-decoration: none;">
-                        <i class="fas fa-external-link-alt"></i> Написать
-                    </a>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-envelope fa-2x"></i>
-                    <h3>Email</h3>
-                    <p>randomhero@internet.ru</p>
-                    <a href="mailto:randomhero@internet.ru" style="color: var(--primary-color); text-decoration: none;">
-                        <i class="fas fa-paper-plane"></i> Написать
-                    </a>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-code fa-2x"></i>
-                    <h3>Проекты</h3>
-                    <p>Смотреть выше</p>
-                    <a href="#repositories" style="color: var(--primary-color); text-decoration: none;">
-                        <i class="fas fa-arrow-up"></i> К репозиториям
-                    </a>
+                <div class="terminal-body">
+                    <p>Свяжитесь со мной для сотрудничества или вопросов:</p>
+                    <p><span class="command">echo "randomhero@internet.ru"</span></p>
+                    <p><span class="command">curl -X POST https://t.me/LakLadon</span></p>
+                    <p><span class="command">discord connect @megaprokuror</span></p>
+                    <p><span class="command">git clone https://github.com/lakladon</span></p>
                 </div>
             </div>
         </section>
         
-        <footer style="text-align: center; padding: 30px 0; margin-top: 50px; border-top: 1px solid var(--secondary-color);">
-            <p>© 2024 Блог /dev/null | Статистика языков программирования</p>
-            <p style="font-size: 0.9rem; opacity: 0.8;">
-                <i class="fas fa-sync-alt"></i> Данные обновляются каждые 5 минут | 
-                <i class="fas fa-code"></i> Пользователь: @lakladon
+        <footer>
+            <p> Блог /dev/null (randomhero)</p>
+            <div class="social-links">
+                <a href="https://github.com/lakladon/" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://t.me/LakLadon" target="_blank"><i class="fab fa-telegram"></i></a>
+                <a href="https://discord.com/users/megaprokuror" target="_blank"><i class="fab fa-discord"></i></a>
+            </div>
+            <p style="margin-top: 20px; font-size: 0.8rem;">
+                <i class="fas fa-terminal"></i> Сделано с <i class="fas fa-heart" style="color: #ff0000;"></i> на Arch Linux
             </p>
         </footer>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
     <script>
-        // Конфигурация
-        const GITHUB_USERNAME = 'lakladon';
-        const API_BASE_URL = 'https://api.github.com';
-        
         // Matrix effect
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
-        
-        function initMatrix() {
+
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+
+        const chars = '我叫伊拉我是学生我在大学学习外语我会说英语和汉语因为我和我的朋友学习汉语所以我们要在假期去中国了解中国文化练习汉语口语安德烈说我们在中国可以报语言学校1佩佳找到了一所学校于是我买了飞机票卡佳在宾馆订了两间房间拿到签证以后我们就出发今天（二月二日星期一是我们在北京的第一天.';
+        const fontSize = 20;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let x = 0; x < columns; x++) {
+            drops[x] = 1000;
+        }
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 26, 51, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00ccff';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 33);
+
+        window.addEventListener('resize', () => {
             canvas.height = window.innerHeight;
             canvas.width = window.innerWidth;
-            
-            const chars = '01';
-            const fontSize = 14;
-            const columns = Math.floor(canvas.width / fontSize);
-            const drops = [];
-            
-            for (let x = 0; x < columns; x++) {
-                drops[x] = Math.random() * 100;
-            }
-            
-            function drawMatrix() {
-                ctx.fillStyle = 'rgba(0, 26, 51, 0.03)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#00ccff';
-                ctx.font = `${fontSize}px monospace`;
-                
-                for (let i = 0; i < drops.length; i++) {
-                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
-                }
-            }
-            
-            setInterval(drawMatrix, 33);
-        }
-        
-        window.addEventListener('resize', initMatrix);
-        
+        });
+
         // Theme toggle
         const themeToggle = document.getElementById('theme-toggle');
         const icon = themeToggle.querySelector('i');
-        
-        function initTheme() {
-            const currentTheme = localStorage.getItem('theme') || 'dark';
-            if (currentTheme === 'light') {
-                document.body.classList.add('light-theme');
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-            }
+
+        // Check for saved theme preference
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        if (currentTheme === 'light') {
+            document.body.classList.add('light-theme');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
         }
-        
+
         themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('light-theme');
             
@@ -1007,494 +818,58 @@
                 localStorage.setItem('theme', 'light');
                 icon.classList.remove('fa-moon');
                 icon.classList.add('fa-sun');
-                updateChartColors();
             } else {
                 localStorage.setItem('theme', 'dark');
                 icon.classList.remove('fa-sun');
                 icon.classList.add('fa-moon');
-                updateChartColors();
             }
         });
-        
-        // GitHub API функции
-        async function fetchGitHubData(url) {
-            try {
-                const response = await fetch(url, {
-                    headers: {
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
+
+        // Fact generator
+        const facts = [
+            "Linux используется на всех 500 самых мощных суперкомпьютерах мира.",
+            "Пингвин Tux — официальный талисман Linux.",
+            "Первый релиз ядра Linux состоялся в 1991 году.",
+            "Android работает на ядре Linux.",
+            "Более 90% облачной инфраструктуры работает на Linux.",
+            "Исходный код Linux состоит из более чем 27 миллионов строк кода.",
+            "Linux используется на Международной космической станции.",
+            "Архитектура Linux используется в 100% топ-500 суперкомпьютеров мира."
+        ];
+
+        const factContainer = document.getElementById('fact-container');
+        const factButton = document.getElementById('fact-button');
+
+        factButton.addEventListener('click', () => {
+            const randomFact = facts[Math.floor(Math.random() * facts.length)];
+            factContainer.textContent = randomFact;
+        });
+
+        // Terminal simulation
+        const terminalCursor = document.getElementById('terminal-cursor');
+        let cursorVisible = true;
+
+        setInterval(() => {
+            cursorVisible = !cursorVisible;
+            terminalCursor.style.opacity = cursorVisible ? '1' : '0';
+        }, 500);
+
+        // PWA setup
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('ServiceWorker registration successful');
+                }).catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
                 });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                return await response.json();
-            } catch (error) {
-                console.error('Error fetching GitHub data:', error);
-                throw error;
-            }
-        }
-        
-        // Загрузка статистики пользователя
-        async function loadUserStats() {
-            try {
-                const userData = await fetchGitHubData(`${API_BASE_URL}/users/${GITHUB_USERNAME}`);
-                
-                document.getElementById('stats-container').innerHTML = `
-                    <div class="stat-card">
-                        <i class="fas fa-code-branch fa-2x"></i>
-                        <h3>Репозитории</h3>
-                        <div class="stat-number">${userData.public_repos}</div>
-                        <p>Публичные</p>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-users fa-2x"></i>
-                        <h3>Подписчики</h3>
-                        <div class="stat-number">${userData.followers}</div>
-                        <p>Подписок: ${userData.following}</p>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-calendar-day fa-2x"></i>
-                        <h3>На GitHub с</h3>
-                        <div class="stat-number">${new Date(userData.created_at).getFullYear()}</div>
-                        <p>${Math.floor((new Date() - new Date(userData.created_at)) / (1000 * 60 * 60 * 24 * 365))} лет</p>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-star fa-2x"></i>
-                        <h3>Используемые языки</h3>
-                        <div class="stat-number" id="total-languages-count">-</div>
-                        <p>Разные языки</p>
-                    </div>
-                `;
-                
-            } catch (error) {
-                document.getElementById('stats-container').innerHTML = `
-                    <div class="error-message">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <p>Не удалось загрузить статистику. ${error.message}</p>
-                    </div>
-                `;
-            }
-        }
-        
-        // Загрузка репозиториев
-        async function loadRepositories() {
-            try {
-                const repos = await fetchGitHubData(`${API_BASE_URL}/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=30`);
-                
-                if (repos.length === 0) {
-                    document.getElementById('repos-container').innerHTML = `
-                        <div class="error-message">
-                            <p>Репозитории не найдены</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                let reposHTML = '';
-                repos.forEach(repo => {
-                    if (!repo.fork) {
-                        const updated = new Date(repo.updated_at).toLocaleDateString('ru-RU');
-                        const langColor = getLanguageColor(repo.language);
-                        reposHTML += `
-                            <div class="repo-card">
-                                <div class="repo-name">
-                                    <i class="fab fa-github"></i> ${repo.name}
-                                </div>
-                                <div class="repo-desc">
-                                    ${repo.description || 'Описание отсутствует'}
-                                </div>
-                                <div class="repo-stats">
-                                    <span title="Звезды"><i class="fas fa-star"></i> ${repo.stargazers_count}</span>
-                                    <span title="Форки"><i class="fas fa-code-branch"></i> ${repo.forks_count}</span>
-                                    <span title="Язык">
-                                        <i class="fas fa-circle" style="color: ${langColor}"></i> 
-                                        ${repo.language || 'N/A'}
-                                    </span>
-                                </div>
-                                <div style="margin-top: 10px; font-size: 0.8rem; opacity: 0.7;">
-                                    Обновлен: ${updated}
-                                </div>
-                                <a href="${repo.html_url}" target="_blank" style="display: inline-block; margin-top: 10px; color: var(--primary-color); text-decoration: none;">
-                                    <i class="fas fa-external-link-alt"></i> Открыть на GitHub
-                                </a>
-                            </div>
-                        `;
-                    }
-                });
-                
-                document.getElementById('repos-container').innerHTML = reposHTML || `
-                    <div class="error-message">
-                        <p>Нет доступных репозиториев</p>
-                    </div>
-                `;
-                
-            } catch (error) {
-                document.getElementById('repos-container').innerHTML = `
-                    <div class="error-message">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <p>Не удалось загрузить репозитории: ${error.message}</p>
-                    </div>
-                `;
-            }
-        }
-        
-        // Получение цвета для языка программирования
-        function getLanguageColor(language) {
-            if (!language) return '#cccccc';
-            
-            const colors = {
-                'Python': '#3572A5',
-                'JavaScript': '#f1e05a',
-                'Java': '#b07219',
-                'Bash': '#89e051',
-                'Shell': '#89e051',
-                'HTML': '#e34c26',
-                'CSS': '#563d7c',
-                'TypeScript': '#2b7489',
-                'Go': '#00ADD8',
-                'Rust': '#dea584',
-                'C++': '#f34b7d',
-                'C': '#555555',
-                'C#': '#178600',
-                'PHP': '#4F5D95',
-                'Ruby': '#701516',
-                'Swift': '#ffac45',
-                'Kotlin': '#F18E33',
-                'Dart': '#00B4AB',
-                'Scala': '#c22d40',
-                'Markdown': '#083fa1',
-                'Dockerfile': '#384d54',
-                'Makefile': '#427819',
-                'PowerShell': '#012456',
-                'TeX': '#3D6117',
-                'Vim Script': '#199f4b',
-                'Assembly': '#6E4C13',
-                'Perl': '#0298c3',
-                'Lua': '#000080',
-                'Haskell': '#5e5086',
-                'Elixir': '#6e4a7e',
-                'Clojure': '#db5855',
-                'Groovy': '#e69f56',
-                'R': '#198CE7',
-                'MATLAB': '#e16737',
-                'Objective-C': '#438eff',
-                'Vue': '#41b883',
-                'Svelte': '#ff3e00',
-                'Julia': '#a270ba'
-            };
-            
-            return colors[language] || `#${Math.floor(Math.random()*16777215).toString(16)}`;
-        }
-        
-        // Загрузка статистики языков
-        async function loadLanguagesStats() {
-            try {
-                const repos = await fetchGitHubData(`${API_BASE_URL}/users/${GITHUB_USERNAME}/repos?per_page=100`);
-                const languages = {};
-                
-                // Собираем статистику по языкам
-                for (const repo of repos) {
-                    if (repo.language) {
-                        languages[repo.language] = (languages[repo.language] || 0) + 1;
-                    }
-                }
-                
-                // Сортируем по убыванию
-                const sortedLanguages = Object.entries(languages)
-                    .sort(([,a], [,b]) => b - a);
-                
-                // Обновляем счетчик языков
-                const totalLanguagesElement = document.getElementById('total-languages-count');
-                if (totalLanguagesElement) {
-                    totalLanguagesElement.textContent = sortedLanguages.length;
-                }
-                
-                // Создаем данные для графиков (первые 10 языков)
-                const topLanguages = sortedLanguages.slice(0, 10);
-                const labels = topLanguages.map(([lang]) => lang);
-                const data = topLanguages.map(([,count]) => count);
-                const colors = topLanguages.map(([lang]) => getLanguageColor(lang));
-                
-                // Общее количество репозиториев
-                const totalRepos = data.reduce((sum, count) => sum + count, 0);
-                
-                // Создаем круговой график
-                createDoughnutChart(labels, data, colors, totalRepos);
-                
-                // Создаем столбчатый график
-                createBarChart(labels, data, colors);
-                
-                // Создаем список языков
-                createLanguagesList(sortedLanguages, totalRepos);
-                
-                // Создаем таблицу языков
-                createLanguagesTable(sortedLanguages, totalRepos);
-                
-            } catch (error) {
-                console.error('Error loading languages stats:', error);
-                document.getElementById('languages-list').innerHTML = `
-                    <div class="error-message">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <p>Не удалось загрузить статистику языков: ${error.message}</p>
-                    </div>
-                `;
-            }
-        }
-        
-        // Создание кругового графика
-        function createDoughnutChart(labels, data, colors, totalRepos) {
-            const ctx = document.getElementById('languages-doughnut-chart').getContext('2d');
-            
-            // Удаляем старый график если он есть
-            if (window.doughnutChart) {
-                window.doughnutChart.destroy();
-            }
-            
-            window.doughnutChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: colors,
-                        borderWidth: 2,
-                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-color')
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: {
-                                color: getComputedStyle(document.documentElement).getPropertyValue('--text-color'),
-                                padding: 15,
-                                font: {
-                                    family: "'JetBrains Mono', monospace",
-                                    size: 12
-                                }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const label = context.label || '';
-                                    const value = context.raw || 0;
-                                    const percentage = ((value / totalRepos) * 100).toFixed(1);
-                                    return `${label}: ${value} (${percentage}%)`;
-                                }
-                            }
-                        }
-                    }
-                }
             });
         }
-        
-        // Создание столбчатого графика
-        function createBarChart(labels, data, colors) {
-            const ctx = document.getElementById('languages-bar-chart').getContext('2d');
-            
-            // Удаляем старый график если он есть
-            if (window.barChart) {
-                window.barChart.destroy();
-            }
-            
-            window.barChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: colors,
-                        borderColor: colors.map(color => color.replace('0.8', '1')),
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `${context.dataset.label || ''}: ${context.raw} репозиториев`;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 204, 255, 0.1)'
-                            },
-                            ticks: {
-                                color: getComputedStyle(document.documentElement).getPropertyValue('--text-color'),
-                                font: {
-                                    family: "'JetBrains Mono', monospace"
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                color: getComputedStyle(document.documentElement).getPropertyValue('--text-color'),
-                                font: {
-                                    family: "'JetBrains Mono', monospace",
-                                    size: 11
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        
-        // Создание списка языков
-        function createLanguagesList(languages, totalRepos) {
-            const container = document.getElementById('languages-list');
-            let html = '';
-            
-            languages.forEach(([language, count], index) => {
-                if (index < 15) { // Показываем только первые 15 языков
-                    const percentage = ((count / totalRepos) * 100).toFixed(1);
-                    const color = getLanguageColor(language);
-                    
-                    html += `
-                        <div class="language-item">
-                            <div class="language-color" style="background-color: ${color};"></div>
-                            <span class="language-name">${language}</span>
-                            <span class="language-count">${count}</span>
-                            <span class="language-percentage">(${percentage}%)</span>
-                        </div>
-                    `;
-                }
-            });
-            
-            if (languages.length > 15) {
-                html += `
-                    <div class="language-item">
-                        <div class="language-color" style="background-color: #cccccc;"></div>
-                        <span class="language-name">...</span>
-                        <span class="language-count">+${languages.length - 15}</span>
-                        <span class="language-percentage">еще</span>
-                    </div>
-                `;
-            }
-            
-            container.innerHTML = html;
-        }
-        
-        // Создание таблицы языков
-        function createLanguagesTable(languages, totalRepos) {
-            const tbody = document.getElementById('languages-table-body');
-            let html = '';
-            
-            languages.forEach(([language, count]) => {
-                const percentage = ((count / totalRepos) * 100).toFixed(2);
-                const color = getLanguageColor(language);
-                
-                html += `
-                    <tr>
-                        <td>
-                            <div class="table-language-cell">
-                                <div style="width: 12px; height: 12px; border-radius: 50%; background-color: ${color};"></div>
-                                ${language}
-                            </div>
-                        </td>
-                        <td>${count}</td>
-                        <td>${percentage}%</td>
-                        <td>
-                            <div style="width: 50px; height: 20px; background-color: ${color}; border-radius: 3px; border: 1px solid #666;"></div>
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            tbody.innerHTML = html;
-        }
-        
-        // Обновление цветов графиков при смене темы
-        function updateChartColors() {
-            const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
-            const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color');
-            
-            if (window.doughnutChart) {
-                window.doughnutChart.options.plugins.legend.labels.color = textColor;
-                window.doughnutChart.data.datasets[0].borderColor = bgColor;
-                window.doughnutChart.update();
-            }
-            
-            if (window.barChart) {
-                window.barChart.options.scales.y.ticks.color = textColor;
-                window.barChart.options.scales.x.ticks.color = textColor;
-                window.barChart.options.scales.y.grid.color = 'rgba(0, 204, 255, 0.1)';
-                window.barChart.update();
-            }
-        }
-        
-        // Загрузка календаря активности
-        async function loadActivityCalendar() {
-            try {
-                const calendarContainer = document.getElementById('github-graph');
-                
-                // Используем GitHub Contributions SVG с адаптивными размерами
-                const width = Math.min(800, window.innerWidth - 40);
-                
-                calendarContainer.innerHTML = `
-                    <div style="text-align: center;">
-                        <img src="https://ghchart.rshah.org/${GITHUB_USERNAME}" 
-                             alt="GitHub Contributions Graph" 
-                             style="width: 100%; max-width: ${width}px; height: auto; border-radius: 5px;"
-                             onerror="this.onerror=null; this.src='https://ghchart.rshah.org/00ccff/${GITHUB_USERNAME}'">
-                        <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
-                            График активности за последний год
-                        </p>
-                    </div>
-                `;
-                
-            } catch (error) {
-                console.error('Error loading calendar:', error);
-            }
-        }
-        
-        // Инициализация при загрузке
-        document.addEventListener('DOMContentLoaded', () => {
-            initMatrix();
-            initTheme();
-            
-            // Загружаем данные
-            loadUserStats();
-            loadRepositories();
-            loadLanguagesStats();
-            loadActivityCalendar();
-            
-            // Автообновление каждые 5 минут
-            setInterval(() => {
-                loadUserStats();
-                loadRepositories();
-                loadLanguagesStats();
-                loadActivityCalendar();
-            }, 300000);
-        });
-        
-        // Обработка изменения размера окна
-        window.addEventListener('resize', () => {
-            if (window.doughnutChart) {
-                window.doughnutChart.resize();
-            }
-            if (window.barChart) {
-                window.barChart.resize();
-            }
-        });
+
+        // Add manifest for PWA
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = '/manifest.json';
+        document.head.appendChild(link);
     </script>
 </body>
 </html>

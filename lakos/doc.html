@@ -135,15 +135,38 @@
             margin-bottom: 40px;
         }
         
-        /* Стили для блоков кода как в примере */
+        /* Стили для блоков кода */
+        .code-container {
+            position: relative;
+            margin: 20px 0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
         .code-block {
             background-color: #1e1e1e;
             border: 1px solid #333;
-            padding: 20px;
-            margin: 20px 0;
+            padding: 0;
             overflow-x: auto;
-            border-radius: 5px;
             position: relative;
+        }
+        
+        /* Индикатор горизонтальной прокрутки */
+        .scroll-indicator {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 2px 6px;
+            font-size: 0.7em;
+            border-radius: 0 5px 0 0;
+            display: none;
+            z-index: 10;
+        }
+        
+        .code-block.scrollable .scroll-indicator {
+            display: block;
         }
         
         .code-block.no-language {
@@ -162,9 +185,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 8px 15px;
             border-bottom: 1px solid #333;
+            position: sticky;
+            left: 0;
+            z-index: 5;
         }
         
         .code-block.no-language .code-header {
@@ -186,6 +212,7 @@
             cursor: pointer;
             border-radius: 3px;
             transition: all 0.3s;
+            min-width: 85px;
         }
         
         .copy-btn:hover {
@@ -200,6 +227,57 @@
             background-color: #f44336;
         }
         
+        /* Контейнер для кода с горизонтальной прокруткой */
+        .code-content {
+            padding: 15px;
+            overflow-x: auto;
+            min-height: 50px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        /* Стили для скроллбара кода */
+        .code-content::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        
+        .code-content::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 0 0 5px 0;
+        }
+        
+        .code-content::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 4px;
+        }
+        
+        .code-content::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
+        
+        /* Стиль для длинных строк кода */
+        pre code {
+            display: block;
+            white-space: pre;
+            word-wrap: normal;
+            word-break: normal;
+            overflow-wrap: normal;
+        }
+        
+        /* Горизонтальная прокрутка для таблиц */
+        .markdown-content table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+            margin: 20px 0;
+        }
+        
+        .markdown-content table th,
+        .markdown-content table td {
+            white-space: nowrap;
+        }
+        
         .file-structure {
             background-color: rgba(255, 255, 255, 0.05);
             border: 1px solid #ffffff;
@@ -207,11 +285,13 @@
             margin: 20px 0;
             font-family: 'Courier New', monospace;
             font-size: 0.95em;
+            overflow-x: auto;
         }
         
         .file-item {
             padding: 5px 0;
             padding-left: 20px;
+            white-space: nowrap;
         }
         
         .file-item.dir::before {
@@ -228,6 +308,7 @@
             padding: 10px 15px;
             margin: 10px 0;
             font-family: 'Courier New', monospace;
+            overflow-x: auto;
         }
         
         .note {
@@ -255,12 +336,13 @@
         p {
             margin-bottom: 15px;
             line-height: 1.7;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
         }
         
         th, td {
@@ -289,22 +371,28 @@
         
         .markdown-content {
             line-height: 1.7;
+            max-width: 100%;
+            overflow-wrap: break-word;
         }
         
         .markdown-content pre.plain-code {
             background-color: #1e1e1e;
-            padding: 20px;
+            padding: 0;
             border-radius: 5px;
-            overflow-x: auto;
             margin: 15px 0;
             border: 1px solid #333;
+            overflow: hidden;
+        }
+        
+        .markdown-content pre.plain-code .code-content {
+            padding: 15px;
+            overflow-x: auto;
         }
         
         .markdown-content pre.plain-code code {
             display: block;
-            padding: 0;
             background: transparent;
-            white-space: pre-wrap;
+            white-space: pre;
             color: #ffffff;
             font-family: 'Courier New', monospace;
             font-size: 1em;
@@ -315,12 +403,14 @@
             padding: 2px 5px;
             border-radius: 3px;
             color: #ffffff;
+            word-break: break-all;
         }
         
         .doc-link {
             color: #00aaff;
             text-decoration: underline;
             cursor: pointer;
+            word-break: break-all;
         }
         
         .doc-link:hover {
@@ -330,6 +420,7 @@
         .external-link {
             color: #00ffaa;
             text-decoration: underline;
+            word-break: break-all;
         }
         
         .external-link:hover {
@@ -344,6 +435,7 @@
         
         .hljs {
             color: #f8f8f2 !important;
+            background: transparent !important;
         }
         
         .hljs-keyword,
@@ -375,6 +467,30 @@
             color: #50fa7b !important;
         }
         
+        /* Стиль для широких строк */
+        .wide-line {
+            position: relative;
+            display: inline-block;
+            min-width: 100%;
+        }
+        
+        /* Подсказка для прокрутки */
+        .scroll-hint {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #aaa;
+            font-size: 0.7em;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: none;
+        }
+        
+        .code-block:hover .scroll-hint {
+            display: block;
+        }
+        
         /* Адаптивность */
         @media (max-width: 1024px) {
             .sidebar {
@@ -384,6 +500,7 @@
             
             .main-content {
                 padding: 30px;
+                max-width: 100%;
             }
         }
         
@@ -416,6 +533,10 @@
             h2 {
                 font-size: 1.7em;
             }
+            
+            .code-content {
+                padding: 12px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -431,10 +552,6 @@
                 font-size: 1.3em;
             }
             
-            .code-block {
-                padding: 15px;
-            }
-            
             .code-header {
                 flex-direction: column;
                 gap: 8px;
@@ -444,24 +561,27 @@
             .copy-btn {
                 align-self: flex-end;
             }
+            
+            .code-content {
+                font-size: 0.9em;
+            }
         }
         
-        /* Скроллбар */
-        ::-webkit-scrollbar {
+        /* Скроллбар основного контента */
+        .main-content::-webkit-scrollbar {
             width: 8px;
-            height: 8px;
         }
         
-        ::-webkit-scrollbar-track {
+        .main-content::-webkit-scrollbar-track {
             background: #000000;
         }
         
-        ::-webkit-scrollbar-thumb {
+        .main-content::-webkit-scrollbar-thumb {
             background: #ffffff;
             border-radius: 4px;
         }
         
-        ::-webkit-scrollbar-thumb:hover {
+        .main-content::-webkit-scrollbar-thumb:hover {
             background: #cccccc;
         }
         
@@ -473,6 +593,25 @@
         
         .fade-in {
             animation: fadeIn 0.3s ease-in;
+        }
+        
+        /* Индикатор ширины кода */
+        .width-indicator {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: #aaa;
+            font-size: 0.7em;
+            padding: 2px 6px;
+            border-radius: 3px;
+            display: none;
+            z-index: 10;
+        }
+        
+        .code-block:hover .width-indicator {
+            display: block;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai.min.css">
@@ -640,6 +779,9 @@
                 // Применяем подсветку синтаксиса
                 applySyntaxHighlighting();
                 
+                // Проверяем ширину блоков кода
+                checkCodeBlockWidths();
+                
                 // Обрабатываем внутренние ссылки
                 processInternalLinks();
                 
@@ -749,20 +891,73 @@
                     const highlightLang = HIGHLIGHT_LANG_MAP[trimmedLang] || trimmedLang;
                     
                     return `
-                        <div class="code-block" id="${codeId}">
-                            <div class="code-header">
-                                <span class="code-language">${displayLang}</span>
-                                <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                        <div class="code-container">
+                            <div class="code-block" id="${codeId}">
+                                <div class="scroll-indicator">← прокрутить →</div>
+                                <div class="code-header">
+                                    <span class="code-language">${displayLang}</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Копировать</button>
+                                </div>
+                                <div class="code-content">
+                                    <pre><code class="language-${highlightLang}">${escapeHtml(code)}</code></pre>
+                                </div>
                             </div>
-                            <pre><code class="language-${highlightLang}">${escapeHtml(code)}</code></pre>
                         </div>
                     `;
                 } 
                 // Если язык не указан или это не ЯП - создаем простой блок
                 else {
-                    return `<pre class="plain-code"><code>${escapeHtml(code)}</code></pre>`;
+                    return `
+                        <div class="code-container">
+                            <div class="code-block no-language">
+                                <div class="scroll-indicator">← прокрутить →</div>
+                                <div class="code-content">
+                                    <pre><code>${escapeHtml(code)}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    `;
                 }
             });
+        }
+        
+        // Проверка ширины блоков кода
+        function checkCodeBlockWidths() {
+            setTimeout(() => {
+                document.querySelectorAll('.code-block').forEach(block => {
+                    const content = block.querySelector('.code-content');
+                    const pre = block.querySelector('pre');
+                    
+                    if (content && pre) {
+                        const contentWidth = content.clientWidth;
+                        const preWidth = pre.scrollWidth;
+                        
+                        // Если содержимое шире контейнера
+                        if (preWidth > contentWidth) {
+                            block.classList.add('scrollable');
+                            
+                            // Добавляем индикатор ширины
+                            const indicator = document.createElement('div');
+                            indicator.className = 'width-indicator';
+                            indicator.textContent = `${preWidth}px → прокрутите →`;
+                            block.appendChild(indicator);
+                            
+                            // Добавляем подсказку для прокрутки
+                            const hint = document.createElement('div');
+                            hint.className = 'scroll-hint';
+                            hint.textContent = 'Используйте колесико мыши или перетащите для прокрутки';
+                            block.appendChild(hint);
+                        }
+                    }
+                });
+                
+                // Также проверяем таблицы
+                document.querySelectorAll('table').forEach(table => {
+                    if (table.scrollWidth > table.clientWidth) {
+                        table.style.display = 'block';
+                    }
+                });
+            }, 100);
         }
         
         // Проверка, является ли строка языком программирования
@@ -934,7 +1129,7 @@
             });
         }
         
-        // Функция копирования кода (как в примере)
+        // Функция копирования кода
         window.copyCode = function(button) {
             const codeBlock = button.closest('.code-block');
             const codeElement = codeBlock.querySelector('code');
@@ -1036,6 +1231,11 @@
                 }
             }
         }
+        
+        // Обработка изменения размера окна
+        window.addEventListener('resize', () => {
+            checkCodeBlockWidths();
+        });
     </script>
 </body>
 </html>
